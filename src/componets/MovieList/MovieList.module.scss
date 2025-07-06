@@ -1,0 +1,31 @@
+.gridContainer {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 1.5rem; /* Это заменяет gap-6 */
+  padding: 1rem; /* Это заменяет p-4 */
+}
+
+@media (min-width: 640px) {
+  .gridContainer {
+    grid-template-columns: repeat(2, 1fr); /* Это для sm:grid-cols-2 */
+  }
+}
+
+@media (min-width: 768px) {
+  .gridContainer {
+    grid-template-columns: repeat(3, 1fr); /* Это для md:grid-cols-3 */
+  }
+}
+
+@media (min-width: 1024px) {
+  .gridContainer {
+    grid-template-columns: repeat(4, 1fr); /* Это для lg:grid-cols-4 */
+  }
+}
+
+.noMoviesFound {
+  grid-column: span 4;
+  text-align: center;
+  color: #6b7280; /* Это заменяет text-gray-500 */
+  font-size: 1rem;
+}

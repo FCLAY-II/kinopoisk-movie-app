@@ -1,0 +1,148 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  max-width: 320px;
+  height: 520px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.imageWrapper {
+  position: relative;
+  width: 100%;
+  height: 320px;  /* Высота изображения */
+}
+
+.loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 4px solid transparent;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Заглушка для отсутствующего постера */
+.placeholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f0f0f0;
+  color: #888;
+  font-size: 1.25rem;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* Обработчик изображений */
+.posterImage {
+  width: 100%;
+  height: 100%;
+}
+
+.description {
+  font-size: 0.875rem;
+  color: #555;
+  margin-bottom: 12px;
+  line-height: 1.5;
+  overflow: hidden;
+  text-overflow: ellipsis;  /* Троеточие */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;  /* Ограничение на 3 строки */
+  -webkit-box-orient: vertical;
+}
+
+.cardContent {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.releaseDate {
+  font-size: 0.875rem;
+  color: #777;
+  margin-bottom: 8px;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  font-size: 0.875rem;
+  color: #555;
+
+  .voteAverage {
+    font-weight: bold;
+    color: #f39c12;
+    margin-right: 8px;
+  }
+
+  .voteCount {
+    color: #888;
+  }
+}
+
+@media (max-width: 768px) {
+  .cardContent {
+    padding: 12px;
+  }
+
+  .title {
+    font-size: 1.125rem;
+  }
+
+  .releaseDate, .description {
+    font-size: 0.75rem;
+  }
+
+  .card {
+    max-width: 90%; /* Уменьшаем ширину карточки для мобильных */
+  }
+}
+
+@media (max-width: 480px) {
+  .cardContent {
+    padding: 8px;
+  }
+
+  .title {
+    font-size: 1rem;
+  }
+
+  .releaseDate, .description {
+    font-size: 0.75rem;
+  }
+
+  .card {
+    max-width: 95%; /* Для ещё меньших экранов увеличиваем ширину карточки */
+  }
+}
