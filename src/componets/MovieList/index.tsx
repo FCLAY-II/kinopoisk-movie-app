@@ -2,9 +2,10 @@ import React from 'react';
 import MovieCard from '../MovieCard';
 import { useAppSelector } from '@/redux/hooks';
 import {IMovie} from "@/componets/MovieCard/types";
+import s from './MovieList.module.scss';
 
 const MovieList = () => {
-  const { moviesList, loading, error } = useAppSelector((state) => state.movies);
+  const { moviesList, searchQuery, loading, error } = useAppSelector((state) => state.movies);
 
   if (loading) {
     return (
@@ -22,6 +23,21 @@ const MovieList = () => {
       </div>
     );
   }
+
+  if (moviesList.length === 0 && searchQuery) {
+    return (
+        <div className={s.emptyState}>
+          <div className={s.emptyStateIcon}>🎬</div>
+          <div className={s.emptyStateTitle}>
+            Фильмы не найдены
+          </div>
+          <div className={s.emptyStateDescription}>
+            По запросу {searchQuery} ничего не найдено. Попробуйте изменить поисковый запрос.
+          </div>
+        </div>
+    );
+  }
+
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4">

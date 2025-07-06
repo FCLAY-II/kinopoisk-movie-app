@@ -23,9 +23,30 @@
   }
 }
 
-.noMoviesFound {
-  grid-column: span 4;
+.emptyState {
   text-align: center;
-  color: #6b7280; /* Это заменяет text-gray-500 */
-  font-size: 1rem;
+  padding: 48px 16px;
+  color: #666;
+
+  &Icon {
+    font-size: 3rem;
+    margin-bottom: 16px;
+    color: #ccc;
+  }
+
+  &Title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #333;
+  }
+
+  &Description {
+    font-size: 0.875rem;
+    color: #666;
+    max-width: 400px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
 }
+

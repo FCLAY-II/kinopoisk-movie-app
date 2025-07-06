@@ -6,12 +6,14 @@ interface MoviesState {
   moviesList: IMovie[];
   loading: boolean;
   error: string | null;
+  searchQuery: string;
 }
 
 const initialState: MoviesState = {
   moviesList: [],
   loading: false,
   error: null,
+  searchQuery: '',
 };
 
 const moviesSlice = createSlice({
@@ -21,6 +23,7 @@ const moviesSlice = createSlice({
     clearMovies: (state) => {
       state.moviesList = [];
       state.error = null;
+      state.searchQuery = '';
     },
     resetMoviesState: () => initialState,
   },
@@ -31,8 +34,9 @@ const moviesSlice = createSlice({
         state.error = null;
       })
       .addCase(getFilmsByKeyWordsThunk.fulfilled, (state, action: PayloadAction<FetchMoviesResponse>) => {
-        state.moviesList = action.payload.movies;
         state.loading = false;
+        state.moviesList = action.payload.movies;
+        state.searchQuery = action.payload.query;
       })
       .addCase(getFilmsByKeyWordsThunk.rejected, (state, action) => {
         state.loading = false;
