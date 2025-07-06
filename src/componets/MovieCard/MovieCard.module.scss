@@ -1,47 +1,75 @@
 .card {
   display: flex;
   flex-direction: column;
-  background-color: white;
-  border: 1px solid #e0e0e0;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
   overflow: hidden;
   max-width: 320px;
-  height: 520px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 560px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  backdrop-filter: blur(10px);
 
   &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    transform: translateY(-12px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    border-color: rgba(102, 126, 234, 0.3);
+
+    .posterImage {
+      transform: scale(1.1);
+    }
+
+    .typeOverlay {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .ratingBadge {
+      transform: scale(1.1);
+    }
+
+    .title {
+      color: #667eea;
+    }
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #667eea, #764ba2, #ff6b6b, #ffd93d);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  &:hover::before {
+    opacity: 1;
   }
 }
 
 .imageWrapper {
   position: relative;
   width: 100%;
-  height: 320px;  /* Высота изображения */
+  height: 320px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  border-radius: 16px 16px 0 0;
+}
+
+.posterImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .loader {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  border: 4px solid transparent;
-  border-top: 4px solid #3498db;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: translate(-50%, -50%) rotate(0deg); }
-  100% { transform: translate(-50%, -50%) rotate(360deg); }
-}
-
-/* Заглушка для отсутствующего постера */
-.placeholder {
   position: absolute;
   top: 0;
   left: 0;
@@ -50,99 +78,519 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #f0f0f0;
-  color: #888;
-  font-size: 1.25rem;
-  text-align: center;
-  font-weight: bold;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  z-index: 2;
 }
 
-/* Обработчик изображений */
-.posterImage {
-  width: 100%;
-  height: 100%;
+.loaderSpinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid transparent;
+  border-top: 3px solid #667eea;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.typeOverlay {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  transform: translateY(-10px);
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 3;
+
+  svg {
+    color: #ffd93d;
+  }
+}
+
+.ratingBadge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  transition: all 0.3s ease;
+  z-index: 3;
+
+  &.ratingGood {
+    background: linear-gradient(135deg, #4ade80, #22c55e);
+    color: white;
+    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+  }
+
+  &.ratingAverage {
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    color: white;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+  }
+
+  &.ratingBad {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: white;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+  }
+
+  svg {
+    fill: currentColor;
+  }
+}
+
+.durationBadge {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+  border-radius: 8px;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 600;
+  z-index: 3;
+
+  svg {
+    color: #ffd93d;
+  }
+}
+
+.cardContent {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+  position: relative;
+}
+
+.title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0;
+  line-height: 1.3;
+  transition: color 0.3s ease;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.metadata {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.year {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #6b7280;
+  font-size: 0.875rem;
+  font-weight: 500;
+
+  svg {
+    color: #667eea;
+  }
+}
+
+.country {
+  padding: 4px 8px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.genres {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.genre {
+  padding: 4px 8px;
+  background: rgba(102, 126, 234, 0.1);
+  color: #667eea;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: 1px solid rgba(102, 126, 234, 0.2);
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba(102, 126, 234, 0.2);
+    transform: scale(1.05);
+  }
+}
+
+.genreMore {
+  padding: 4px 8px;
+  background: rgba(107, 114, 128, 0.1);
+  color: #6b7280;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: 1px solid rgba(107, 114, 128, 0.2);
+}
+
+.descriptionWrapper {
+  position: relative;
+  flex: 1;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+
+  // Тултип появляется только при ховере описания (десктоп)
+  &:hover .descriptionTooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(-10px);
+  }
 }
 
 .description {
   font-size: 0.875rem;
-  color: #555;
-  margin-bottom: 12px;
+  color: #6b7280;
   line-height: 1.5;
-  overflow: hidden;
-  text-overflow: ellipsis;  /* Троеточие */
+  margin: 0;
   display: -webkit-box;
-  -webkit-line-clamp: 3;  /* Ограничение на 3 строки */
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-align: justify;
+  cursor: help;
+  transition: color 0.3s ease;
+  word-break: break-word;
+  hyphens: auto;
+  white-space: normal;
+  letter-spacing: 0.01em;
+
+  &:hover {
+    color: #667eea;
+  }
 }
 
-.cardContent {
+// Десктопный тултип
+.descriptionTooltip {
+  position: absolute;
+  bottom: calc(100% + 15px);
+  left: 50%;
+  transform: translateX(-50%) translateY(-20px);
+  background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
   padding: 16px;
-  display: flex;
-  flex-direction: column;
-}
+  max-width: 300px;
+  min-width: 250px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(20px);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 100;
+  pointer-events: none;
 
-.title {
-  font-size: 1rem;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 8px;
-}
-
-.releaseDate {
-  font-size: 0.875rem;
-  color: #777;
-  margin-bottom: 8px;
-}
-
-.rating {
-  display: flex;
-  align-items: center;
-  font-size: 0.875rem;
-  color: #555;
-
-  .voteAverage {
-    font-weight: bold;
-    color: #f39c12;
-    margin-right: 8px;
+  // Стрелочка внизу тултипа
+  &::before {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 8px solid transparent;
+    border-top-color: #1f2937;
   }
 
-  .voteCount {
-    color: #888;
+  // Цветная полоска сверху
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #667eea, #764ba2, #ff6b6b, #ffd93d);
+    border-radius: 12px 12px 0 0;
+  }
+}
+
+.tooltipContent {
+  color: white;
+}
+
+.tooltipTitle {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #ffd93d;
+  margin: 0 0 8px 0;
+  line-height: 1.3;
+}
+
+.tooltipDescription {
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  text-align: justify;
+  word-break: break-word;
+  hyphens: auto;
+  white-space: normal;
+  letter-spacing: 0.01em;
+}
+
+// Адаптивность
+@media (max-width: 1024px) {
+  .card {
+    max-width: 280px;
+    height: 520px;
+  }
+
+  .imageWrapper {
+    height: 280px;
+  }
+
+  .cardContent {
+    padding: 16px;
+  }
+
+  .descriptionTooltip {
+    max-width: 260px;
+    min-width: 220px;
   }
 }
 
 @media (max-width: 768px) {
-  .cardContent {
-    padding: 12px;
-  }
-
-  .title {
-    font-size: 1.125rem;
-  }
-
-  .releaseDate, .description {
-    font-size: 0.75rem;
-  }
-
   .card {
-    max-width: 90%; /* Уменьшаем ширину карточки для мобильных */
+    max-width: 100%;
+    height: 450px;
   }
-}
 
-@media (max-width: 480px) {
+  .imageWrapper {
+    height: 240px;
+  }
+
   .cardContent {
-    padding: 8px;
+    padding: 14px;
+    gap: 8px;
   }
 
   .title {
     font-size: 1rem;
+    -webkit-line-clamp: 2;
   }
 
-  .releaseDate, .description {
-    font-size: 0.75rem;
+  .typeOverlay {
+    font-size: 0.7rem;
+    padding: 4px 8px;
   }
 
+  .ratingBadge {
+    font-size: 0.7rem;
+    padding: 4px 8px;
+  }
+
+  .durationBadge {
+    font-size: 0.65rem;
+    padding: 3px 6px;
+  }
+
+  .country {
+    font-size: 0.7rem;
+  }
+
+  .genre {
+    font-size: 0.7rem;
+    padding: 3px 6px;
+  }
+
+  .description {
+    font-size: 0.8rem;
+    -webkit-line-clamp: 2;
+    cursor: default; // Убираем указатель помощи
+  }
+
+  // Убираем тултип на планшетах
+  .descriptionWrapper:hover .descriptionTooltip {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .description:hover {
+    color: #6b7280; // Не меняем цвет при ховере
+  }
+}
+
+// Мобильная версия
+@media (max-width: 480px) {
   .card {
-    max-width: 95%; /* Для ещё меньших экранов увеличиваем ширину карточки */
+    height: 420px;
+    margin-bottom: 16px;
+  }
+
+  .imageWrapper {
+    height: 200px;
+  }
+
+  .posterImage {
+    object-position: center 20%;
+  }
+
+  .cardContent {
+    padding: 12px;
+    gap: 8px;
+    justify-content: space-between;
+  }
+
+  .title {
+    font-size: 0.95rem;
+    -webkit-line-clamp: 2;
+  }
+
+  .metadata {
+    gap: 8px;
+  }
+
+  .year {
+    font-size: 0.8rem;
+  }
+
+  .genres {
+    gap: 4px;
+    margin-top: 4px;
+  }
+
+  .genre {
+    font-size: 0.65rem;
+    padding: 2px 6px;
+  }
+
+  .genreMore {
+    font-size: 0.65rem;
+    padding: 2px 6px;
+  }
+
+  .descriptionWrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .description {
+    font-size: 0.8rem;
+    -webkit-line-clamp: 3;
+    line-height: 1.4;
+    cursor: default; // Обычный курсор
+  }
+
+  // Полностью убираем тултип на мобиле
+  .descriptionTooltip {
+    display: none;
+  }
+}
+
+// Очень маленькие экраны (320px)
+@media (max-width: 360px) {
+  .card {
+    height: 400px;
+  }
+
+  .imageWrapper {
+    height: 180px;
+  }
+
+  .cardContent {
+    padding: 10px;
+    gap: 6px;
+  }
+
+  .title {
+    font-size: 0.9rem;
+  }
+
+  .description {
+    font-size: 0.75rem;
+    -webkit-line-clamp: 3;
+  }
+}
+
+// Анимация появления
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+// Hover эффекты для мобильных устройств
+@media (hover: none) and (pointer: coarse) {
+  .card:hover {
+    transform: none;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  }
+
+  .card:hover .posterImage {
+    transform: none;
+  }
+
+  .card:hover .typeOverlay {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+
+  .card:hover .ratingBadge {
+    transform: none;
+  }
+
+  .card:hover .title {
+    color: #1f2937;
+  }
+
+  // Убираем все hover эффекты с описания на мобиле
+  .description:hover {
+    color: #6b7280;
+  }
+
+  .descriptionWrapper:hover .descriptionTooltip {
+    opacity: 0;
+    visibility: hidden;
   }
 }
