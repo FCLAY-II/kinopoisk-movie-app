@@ -1,48 +1,37 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { useRouter } from 'next/router';
-import { useAppSelector, useAppDispatch } from '@/redux/hooks';
+import { useAppSelector } from '@/redux/hooks';
 import SearchMovies from '@/componets/SearchMovies';
 import MovieList from '@/componets/MovieList';
-import { clearUser } from '@/redux/features/user/userSlice';
-import { handleSignOut } from '@/lib/firebase';
+import {MainLayout} from "@/componets/Layout/MainLayout";
 
 const SearchMoviesPage: React.FC = () => {
   const router = useRouter();
-  const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user.user);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!user) {
       router.push('/auth');
     }
   }, [user, router]);
 
-  const handleSignOutClick = async () => {
-    try {
-      await handleSignOut();
-      dispatch(clearUser());
-      router.push('/auth');
-    } catch (error) {
-      console.error('Ошибка при выходе:', error);
-    }
-  };
-
   if (!user) return null;
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">Поиск фильмов</h1>
-        <button
-          onClick={handleSignOutClick}
-          className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
-        >
-          Выйти
-        </button>
-      </div>
-      <SearchMovies />
-      <MovieList />
-    </div>
+      <MainLayout>
+        <div className="space-y-6">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold text-gray-800 mb-2">
+              Поиск фильмов
+            </h2>
+            <p className="text-gray-600">
+              Найдите любимые фильмы и сериалы
+            </p>
+          </div>
+          <SearchMovies />
+          <MovieList />
+        </div>
+      </MainLayout>
   );
 };
 

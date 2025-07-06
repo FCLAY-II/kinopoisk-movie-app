@@ -41,6 +41,28 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-#idea
+# IDE
 .idea/
 .idea/*
+.vscode/
+*.swp
+*.swo
+*.sublime-workspace
+*.sublime-project
+
+# Logs
+logs
+*.log
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional stylelint cache
+.stylelintcache
+
+# Mac files
+.AppleDouble
+.LSOverride

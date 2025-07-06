@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import s from './MovieCard.module.scss';
 import {MovieCardProps} from "@/componets/MovieCard/types";
+import {formatRating, formatYear} from "@/utils/common";
 
 const MovieCard = ({ movie }: MovieCardProps) => {
     const [loading, setLoading] = useState(true);
@@ -27,10 +28,10 @@ const MovieCard = ({ movie }: MovieCardProps) => {
 
             <div className={s.cardContent}>
                 <h3 className={s.title}>{movie.nameRu || movie.nameEn}</h3>
-                <p className={s.releaseDate}>{movie.year}</p>
+                <p className={s.releaseDate}>{formatYear(movie.year)}</p>
                 <p className={s.description}>{movie.description}</p>
                 <div className={s.rating}>
-                    <span className={s.voteAverage}>{movie.rating}</span>
+                    <span className={s.voteAverage}>{formatRating(movie.rating)}</span>
                     <span className={s.voteCount}>({movie.ratingVoteCount} голосов)</span>
                 </div>
             </div>
