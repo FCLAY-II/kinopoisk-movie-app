@@ -1,6 +1,6 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import {filmSearchService} from "@/services/api/kinopoisk";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {IMovie} from "@/componets/MovieCard/types";
+import {FetchMoviesResponse, getFilmsByKeyWordsThunk} from "@/redux/features/movies/thunks/getFilmsByKeyWordsThunk";
 
 interface MoviesState {
   moviesList: IMovie[];
@@ -14,13 +14,6 @@ const initialState: MoviesState = {
   error: null,
 };
 
-export const fetchMovies = createAsyncThunk(
-  'movies/search',
-  async (query: string) => {
-    return await filmSearchService.searchMovies({ query });
-  }
-);
-
 const moviesSlice = createSlice({
   name: 'movies',
   initialState,
@@ -33,15 +26,15 @@ const moviesSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchMovies.pending, (state) => {
+      .addCase(getFilmsByKeyWordsThunk.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchMovies.fulfilled, (state, action: PayloadAction<IMovie[]>) => {
-        state.moviesList = action.payload;
+      .addCase(getFilmsByKeyWordsThunk.fulfilled, (state, action: PayloadAction<FetchMoviesResponse>) => {
+        state.moviesList = action.payload.movies;
         state.loading = false;
       })
-      .addCase(fetchMovies.rejected, (state, action) => {
+      .addCase(getFilmsByKeyWordsThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message ?? 'Произошла ошибка при поиске фильмов';
       });

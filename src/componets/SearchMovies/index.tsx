@@ -1,7 +1,8 @@
 import React, { useState, FormEvent } from 'react';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { fetchMovies } from '@/redux/features/movies/moviesSlice';
+import {clearMovies} from '@/redux/features/movies/moviesSlice';
 import styles from './SearchMovies.module.scss';
+import {getFilmsByKeyWordsThunk} from "@/redux/features/movies/thunks/getFilmsByKeyWordsThunk";
 
 const SearchMovies: React.FC = () => {
   const [query, setQuery] = useState('');
@@ -11,8 +12,9 @@ const SearchMovies: React.FC = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!query.trim()) return;
-    
-    dispatch(fetchMovies(query));
+
+    dispatch(clearMovies());
+    dispatch(getFilmsByKeyWordsThunk({ query: query.trim() }));
   };
 
   return (
