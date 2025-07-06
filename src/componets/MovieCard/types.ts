@@ -22,15 +22,3 @@ export interface IMovie {
   posterUrl: string;
   posterUrlPreview: string;
 }
-
-export interface SearchResponse {
-  keyword: string;
-  pagesCount: number;
-  films: IMovie[];
-  searchFilmsCountResult: number;
-}
-
-export interface MovieError {
-  message: string;
-  code: number;
-}

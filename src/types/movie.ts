@@ -1,14 +1,6 @@
-export interface Movie {
-  kinopoiskId: number;
-  nameRu: string;
-  nameEn?: string;
-  year: number;
-  posterUrl: string;
-  rating?: number;
-  description?: string;
-}
+import {IMovie} from "@/componets/MovieCard/types";
 
 export interface SearchResponse {
-    films: Movie[];
+    films: IMovie[];
     total: number;
 }

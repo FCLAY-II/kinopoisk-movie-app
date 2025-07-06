@@ -4,8 +4,8 @@ import moviesReducer from './features/movies/moviesSlice';
 
 export const store = configureStore({
     reducer: {
-        movies: moviesReducer,
         user: userReducer,
+        movies: moviesReducer,
     },
 });
 

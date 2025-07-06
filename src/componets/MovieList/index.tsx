@@ -1,6 +1,7 @@
 import React from 'react';
 import MovieCard from '../MovieCard';
-import {useAppSelector} from "../../redux/hooks";
+import { useAppSelector } from '@/redux/hooks';
+import {IMovie} from "@/componets/MovieCard/types";
 
 const MovieList = () => {
   const { moviesList, loading, error } = useAppSelector((state) => state.movies);
@@ -24,10 +25,10 @@ const MovieList = () => {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4">
-      {moviesList.map((movie) => {
+      {moviesList.map((movie: IMovie) => {
         return (
           <MovieCard
-            key={movie.id}
+            key={movie.filmId}
             movie={movie}
           />
         );

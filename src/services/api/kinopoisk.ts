@@ -1,11 +1,13 @@
-import {kinopoiskApi} from '@/services/api/baseApi';
-import {Movie, SearchResponse} from '@/types/movie';
-import {AxiosError} from 'axios';
-import {SearchMoviesParams} from "@/services/api/types";
+import { kinopoiskApi } from '@/services/api/baseApi';
+import { AxiosError } from 'axios';
+import { SearchMoviesParams } from '@/services/api/types';
+import { IMovie } from '@/componets/MovieCard/types';
+import {SearchResponse} from "@/types/movie";
 
 
-export const kinopoiskService = {
-    async searchMovies({ query, page = 1 }: SearchMoviesParams): Promise<Movie[]> {
+
+export const filmSearchService = {
+    async searchMovies({ query, page = 1 }: SearchMoviesParams): Promise<IMovie[]> {
         try {
             const { data } = await kinopoiskApi.get<SearchResponse>('/search-by-keyword', {
                 params: {
@@ -13,18 +15,15 @@ export const kinopoiskService = {
                     page,
                 },
             });
-
-            if (!data.films.length) {
-                throw new Error('Нет результатов поиска');
-            }
-
-            return data.films;
+            return data.films || [];
         } catch (error) {
             if (error instanceof AxiosError) {
-                throw {
-                    message: error.response?.data?.message || 'Произошла ошибка при поиске фильмов',
-                    status: error.response?.status || 500,
-                };
+                const errorMessage = error.response?.data?.message || 'Произошла ошибка при поиске фильмов';
+                const errorStatus = error.response?.status || 500;
+                const customError = new Error(errorMessage);
+                (customError as any).status = errorStatus;
+                
+                throw customError;
             }
             throw error;
         }

@@ -1,10 +1,9 @@
-// src/redux/features/movies/moviesSlice.ts
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { Movie } from '@/types/movie';
-import {kinopoiskService} from "@/services/api/kinopoisk";
+import {filmSearchService} from "@/services/api/kinopoisk";
+import {IMovie} from "@/componets/MovieCard/types";
 
 interface MoviesState {
-  moviesList: Movie[];
+  moviesList: IMovie[];
   loading: boolean;
   error: string | null;
 }
@@ -18,7 +17,7 @@ const initialState: MoviesState = {
 export const fetchMovies = createAsyncThunk(
   'movies/search',
   async (query: string) => {
-    return await kinopoiskService.searchMovies({ query });
+    return await filmSearchService.searchMovies({ query });
   }
 );
 
@@ -30,6 +29,7 @@ const moviesSlice = createSlice({
       state.moviesList = [];
       state.error = null;
     },
+    resetMoviesState: () => initialState,
   },
   extraReducers: (builder) => {
     builder
@@ -37,7 +37,7 @@ const moviesSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchMovies.fulfilled, (state, action: PayloadAction<Movie[]>) => {
+      .addCase(fetchMovies.fulfilled, (state, action: PayloadAction<IMovie[]>) => {
         state.moviesList = action.payload;
         state.loading = false;
       })
@@ -48,5 +48,5 @@ const moviesSlice = createSlice({
   },
 });
 
-export const { clearMovies } = moviesSlice.actions;
+export const { clearMovies, resetMoviesState} = moviesSlice.actions;
 export default moviesSlice.reducer;

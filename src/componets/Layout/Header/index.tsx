@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import { clearUser } from '@/redux/features/user/userSlice'
 import { handleSignOut } from '@/lib/firebase'
 import React from 'react'
+import { resetMoviesState } from "@/redux/features/movies/moviesSlice";
 
 const Header = () => {
   const router = useRouter()
@@ -13,6 +14,7 @@ const Header = () => {
     try {
       await handleSignOut()
       dispatch(clearUser())
+      dispatch(resetMoviesState());
       router.push('/auth')
     } catch (error) {
       console.error('Ошибка при выходе:', error)

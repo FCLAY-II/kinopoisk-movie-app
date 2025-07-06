@@ -1,4 +1,3 @@
-// src/components/SearchMovies.tsx
 import React, { useState, FormEvent } from 'react';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { fetchMovies } from '@/redux/features/movies/moviesSlice';
@@ -7,7 +6,7 @@ import styles from './SearchMovies.module.scss';
 const SearchMovies: React.FC = () => {
   const [query, setQuery] = useState('');
   const dispatch = useAppDispatch();
-  const { loading, error } = useAppSelector(state => state.movies);
+  const { loading } = useAppSelector(state => state.movies);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -35,12 +34,6 @@ const SearchMovies: React.FC = () => {
           {loading ? 'Поиск...' : 'Найти'}
         </button>
       </form>
-      
-      {error && (
-        <div className={styles.error}>
-          {error}
-        </div>
-      )}
     </div>
   );
 };
