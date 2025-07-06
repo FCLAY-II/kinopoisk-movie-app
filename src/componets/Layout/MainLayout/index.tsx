@@ -1,15 +1,19 @@
 import React from 'react';
-import Header from "@/componets/Layout/Header";
-import { MainLayoutProps } from "@/componets/Layout/MainLayout/types";
+import Header from '../Header';
+import {MainLayoutProps} from './types';
+import styles from './MainLayout.module.scss';
 
-
-export const MainLayout = ({ children }: MainLayoutProps) => {
+export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className={styles.layout}>
       <Header />
-      <main className="container mx-auto px-4 py-8">
-        {children}
+      <main className={styles.main}>
+        <div className={styles.container}>
+          <div className={styles.content}>
+            {children}
+          </div>
+        </div>
       </main>
     </div>
-  )
-}
+  );
+};

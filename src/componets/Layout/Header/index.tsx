@@ -1,50 +1,135 @@
-import { useAppSelector, useAppDispatch } from '@/redux/hooks'
-import { useRouter } from 'next/router'
-import { clearUser } from '@/redux/features/user/userSlice'
-import { handleSignOut } from '@/lib/firebase'
-import React from 'react'
-import { resetMoviesState } from "@/redux/features/movies/moviesSlice";
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { useAppSelector, useAppDispatch } from '@/redux/hooks';
+import { selectUser } from '@/redux/features/user/userSlice';
+import { clearUser } from '@/redux/features/user/userSlice';
+import { 
+  Film, 
+  Heart, 
+  LogOut,
+  Menu, 
+  X,
+  User,
+  Search,
+} from 'lucide-react';
+import MobileMenu from './MobileMenu';
+import s from './Header.module.scss';
+import {handleSignOut} from "@/lib/firebase";
 
-const Header = () => {
-  const router = useRouter()
-  const dispatch = useAppDispatch()
-  const user = useAppSelector((state) => state.user.user)
+const Header: React.FC = () => {
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const user = useAppSelector(selectUser);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const handleSignOutClick = async () => {
+  // Закрываем мобильное меню при изменении маршрута
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [router.pathname]);
+
+  // Закрываем мобильное меню при клике вне его
+  useEffect(() => {
+    // Проверяем, что мы в браузере
+    if (typeof window === 'undefined') return;
+
+    const handleClickOutside = () => {
+      if (isMobileMenuOpen) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [isMobileMenuOpen]);
+
+  const handleLogout = async () => {
     try {
-      await handleSignOut()
-      dispatch(clearUser())
-      dispatch(resetMoviesState());
-      router.push('/auth')
+      await handleSignOut();
+      dispatch(clearUser());
+      router.push('/auth');
     } catch (error) {
-      console.error('Ошибка при выходе:', error)
+      console.error('Ошибка при выходе:', error);
     }
-  }
+  };
 
-  if (!user) return null
+  const isActiveRoute = (path: string) => {
+    return router.pathname === path;
+  };
+
+  const toggleMobileMenu = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
 
   return (
-    <header className="bg-white shadow-sm border-b">
-      <div className="container mx-auto px-4 py-4">
-        <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-gray-800">
-            Кирюшин кинопоиск
-          </h1>
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-gray-600">
-              {user.email}
-            </span>
+    <>
+      <header className={s.header}>
+        <div className={s.container}>
+          <a href="/search-movies" className={s.logo}>
+            <div className={s.logoIcon}>
+              <Film size={20} />
+            </div>
+            <span className={s.logoText}>КиноПоиск</span>
+          </a>
+
+          <nav className={s.nav}>
+            <ul className={s.navLinks}>
+              <li>
+                <a
+                  href="/search-movies"
+                  className={`${s.navLink} ${isActiveRoute('/search-movies') ? s.active : ''}`}
+                >
+                  <Search size={18} />
+                  Поиск фильмов
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/favorites"
+                  className={`${s.navLink} ${isActiveRoute('/favorites') ? s.active : ''}`}
+                >
+                  <Heart size={18} />
+                  Избранное
+                </a>
+              </li>
+            </ul>
+          </nav>
+
+          <div className={s.userSection}>
+            {user && (
+              <div className={s.userInfo}>
+                <div className={s.avatar}>
+                  <User size={20} />
+                </div>
+                <span className={s.userName}>
+                  {user.displayName || user.email}
+                </span>
+              </div>
+            )}
             <button
-              onClick={handleSignOutClick}
-              className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
+              onClick={handleLogout}
+              className={s.logoutButton}
             >
+              <LogOut size={16} />
               Выйти
             </button>
           </div>
-        </div>
-      </div>
-    </header>
-  )
-}
 
-export default Header
+          <button
+            className={s.mobileMenuButton}
+            onClick={toggleMobileMenu}
+          >
+            {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
+      </header>
+      <MobileMenu
+        isOpen={isMobileMenuOpen}
+        user={user}
+        onLogout={handleLogout}
+      />
+    </>
+  );
+};
+
+export default Header;

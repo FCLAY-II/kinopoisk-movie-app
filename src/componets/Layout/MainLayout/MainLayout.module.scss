@@ -1,0 +1,65 @@
+.layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  position: relative;
+  overflow-x: hidden;
+}
+
+.main {
+  flex: 1;
+  padding: 40px 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.content {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+}
+
+// Адаптивность
+@media (max-width: 768px) {
+  .main {
+    padding: 20px 16px;
+  }
+
+  .content {
+    padding: 24px;
+    border-radius: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .main {
+    padding: 16px 12px;
+  }
+
+  .content {
+    padding: 20px;
+    border-radius: 12px;
+  }
+}
