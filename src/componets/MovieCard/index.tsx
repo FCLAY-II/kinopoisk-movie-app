@@ -1,11 +1,28 @@
-import React, { useState } from 'react';
-import { Star, Calendar, Film, Eye, Clock } from 'lucide-react';
+import React, { useState, memo } from 'react';
+import { Star, Calendar, Film, Eye, Clock, Heart } from 'lucide-react';
 import s from './MovieCard.module.scss';
-import {MovieCardProps} from "@/componets/MovieCard/types";
-import {formatRating, formatYear, cleanDescription, truncateDescription} from "@/utils/common";
+import { MovieCardProps } from "@/componets/MovieCard/types";
+import { formatRating, formatYear, cleanDescription, truncateDescription } from "@/utils/common";
+import { useFavorites } from "@/hooks/useFavorites";
 
-const MovieCard = ({ movie }: MovieCardProps) => {
+const MovieCard = memo(({ movie, className }: MovieCardProps) => {
+    const { isFavorite, toggleFavorite } = useFavorites();
+    const [isTogglingFavorite, setIsTogglingFavorite] = useState(false);
     const [imageLoading, setImageLoading] = useState(true);
+
+    const handleFavoriteClick = async (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (isTogglingFavorite) return;
+
+        setIsTogglingFavorite(true);
+        try {
+            await toggleFavorite(movie);
+        } finally {
+            setIsTogglingFavorite(false);
+        }
+    };
 
     const handleImageLoad = () => {
         setImageLoading(false);
@@ -46,9 +63,12 @@ const MovieCard = ({ movie }: MovieCardProps) => {
 
     // Очищаем описание от лишних пробелов
     const cleanedDescription = cleanDescription(movie.description);
+    
+    // Проверяем является ли фильм избранным
+    const isMovieFavorite = isFavorite(movie.filmId);
 
     return (
-        <div className={s.card}>
+        <div className={`${s.card} ${className || ''}`}>
             <div className={s.imageWrapper}>
                 {imageLoading && (
                     <div className={s.loader}>
@@ -59,12 +79,27 @@ const MovieCard = ({ movie }: MovieCardProps) => {
                 <img
                     className={s.posterImage}
                     src={movie.posterUrl}
-                    alt={movie.nameRu}
+                    alt={movie.nameRu || movie.nameEn}
                     onLoad={handleImageLoad}
                     onError={handleImageLoad}
+                    loading="lazy"
                     sizes="(max-width: 480px) 100vw, (max-width: 768px) 50vw, 33vw"
-                    srcSet={`${movie.posterUrl} 500w`}
                 />
+
+                {/* Кнопка избранного */}
+                <button
+                    onClick={handleFavoriteClick}
+                    disabled={isTogglingFavorite}
+                    className={`${s.favoriteButton} ${isMovieFavorite ? s.active : ''} ${isTogglingFavorite ? s.loading : ''}`}
+                    title={isMovieFavorite ? 'Убрать из избранного' : 'Добавить в избранное'}
+                    aria-label={isMovieFavorite ? 'Убрать из избранного' : 'Добавить в избранное'}
+                >
+                    <Heart
+                        size={20}
+                        className={s.heartIcon}
+                        fill={isMovieFavorite ? 'currentColor' : 'none'}
+                    />
+                </button>
 
                 {/* Оверлей с типом контента */}
                 <div className={s.typeOverlay}>
@@ -73,10 +108,12 @@ const MovieCard = ({ movie }: MovieCardProps) => {
                 </div>
 
                 {/* Рейтинг в углу */}
-                <div className={`${s.ratingBadge} ${getRatingClass(movie.rating)}`}>
-                    <Star size={12} />
-                    <span>{formatRating(movie.rating)}</span>
-                </div>
+                {movie.rating && (
+                    <div className={`${s.ratingBadge} ${getRatingClass(movie.rating)}`}>
+                        <Star size={12} className={s.starIcon} />
+                        <span>{formatRating(movie.rating)}</span>
+                    </div>
+                )}
 
                 {/* Продолжительность */}
                 {movie.filmLength && (
@@ -96,14 +133,14 @@ const MovieCard = ({ movie }: MovieCardProps) => {
                         <span>{formatYear(movie.year)}</span>
                     </div>
                     
-                    {movie.countries.length > 0 && (
+                    {movie.countries && movie.countries.length > 0 && (
                         <div className={s.country}>
                             <span>{movie.countries[0].country}</span>
                         </div>
                     )}
                 </div>
 
-                {movie.genres.length > 0 && (
+                {movie.genres && movie.genres.length > 0 && (
                     <div className={s.genres}>
                         {movie.genres.slice(0, 3).map((genre, index) => (
                             <span key={index} className={s.genre}>
@@ -119,13 +156,13 @@ const MovieCard = ({ movie }: MovieCardProps) => {
                 {cleanedDescription && (
                     <div className={s.descriptionWrapper}>
                         <p className={s.description}>
-                            {cleanedDescription}
+                            {truncateDescription(cleanedDescription, 100)}
                         </p>
                         {/* Десктопный тултип */}
                         <div className={s.descriptionTooltip}>
                             <div className={s.tooltipContent}>
                                 <h4 className={s.tooltipTitle}>{movie.nameRu || movie.nameEn}</h4>
-                                <p className={s.tooltipDescription}>{truncateDescription(cleanedDescription)}</p>
+                                <p className={s.tooltipDescription}>{cleanedDescription}</p>
                             </div>
                         </div>
                     </div>
@@ -133,6 +170,8 @@ const MovieCard = ({ movie }: MovieCardProps) => {
             </div>
         </div>
     );
-};
+});
+
+MovieCard.displayName = 'MovieCard';
 
 export default MovieCard;

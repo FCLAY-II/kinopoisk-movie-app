@@ -1,6 +1,7 @@
 import {FirebaseApp, initializeApp} from "firebase/app";
 import {Auth, getAuth} from "firebase/auth";
 import {FirebaseConfig} from "@/lib/firebase/types";
+import { getFirestore } from 'firebase/firestore';
 
 
 
@@ -18,5 +19,11 @@ const firebaseConfig: FirebaseConfig = {
     measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
 } as const;
 
+// Инициализируем Firebase
 const app: FirebaseApp = initializeApp(firebaseConfig);
+
+// Инициализируем Authentication
 export const auth: Auth = getAuth(app);
+
+// Инициализируем Firestore
+export const db = getFirestore(app); // Добавляем Firestore
