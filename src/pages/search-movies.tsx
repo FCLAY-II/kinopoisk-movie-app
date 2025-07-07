@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useAppSelector } from '@/redux/hooks';
 import SearchMovies from '@/componets/SearchMovies';
 import MovieList from '@/componets/MovieList';
-import {MainLayout} from "@/componets/Layout/MainLayout";
+import MainLayout from "@/componets/Layout/MainLayout";
 
 const SearchMoviesPage: React.FC = () => {
   const router = useRouter();

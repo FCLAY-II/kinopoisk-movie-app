@@ -1,10 +1,10 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import { 
-  Heart, 
+import {
+  Heart,
   LogOut,
   User as IconUser,
-  Search,
+  Search, User,
 } from 'lucide-react';
 import s from './MobileMenu.module.scss';
 import {MobileMenuProps} from "@/componets/Layout/Header/MobileMenu/types";
@@ -35,6 +35,15 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, user, onLogout }) => {
           >
             <Heart size={18} />
             Избранное
+          </a>
+        </li>
+        <li>
+          <a
+              href="/profile"
+              className={`${s.mobileNavLink} ${isActiveRoute('/profile') ? s.active : ''}`}
+          >
+            <User size={18} />
+            Профиль
           </a>
         </li>
       </ul>

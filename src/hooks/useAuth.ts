@@ -1,30 +1,39 @@
-// src/hooks/useAuth.ts
 import { useEffect } from 'react';
-import { useAppDispatch } from '@/redux/hooks';
-import { setUser, clearUser } from '@/redux/features/user/userSlice';
-import type { User } from '@/types/user';
-import {subscribeToAuthState} from "@/lib/firebase/auth";
-
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { 
+    setUser, 
+    clearUser, 
+    setAuthChecked,
+    selectUser, 
+    selectUserLoading,
+    selectAuthChecked 
+} from '@/redux/features/user/userSlice';
+import { subscribeToAuthState } from '@/lib/firebase/auth';
+import { User } from 'firebase/auth';
 
 export const useAuth = () => {
-  const dispatch = useAppDispatch();
+    const dispatch = useAppDispatch();
+    const user = useAppSelector(selectUser);
+    const loading = useAppSelector(selectUserLoading);
+    const authChecked = useAppSelector(selectAuthChecked);
 
-  useEffect(() => {
-    const unsubscribe = subscribeToAuthState((firebaseUser) => {
-      if (firebaseUser) {
-        const userData: User = {
-          uid: firebaseUser.uid,
-          email: firebaseUser.email || '',
-          displayName: firebaseUser.displayName || undefined,
-          photoURL: firebaseUser.photoURL || undefined,
-        };
-        dispatch(setUser(userData));
-      } else {
-        dispatch(clearUser());
-      }
-    });
+    useEffect(() => {
+        const unsubscribe = subscribeToAuthState((firebaseUser: User | null) => {
+            if (firebaseUser) {
+                dispatch(setUser(firebaseUser));
+            } else {
+                dispatch(clearUser());
+            }
+            // Важно: устанавливаем authChecked в true после первого срабатывания onAuthStateChanged
+            dispatch(setAuthChecked(true));
+        });
 
-    // Очистка подписки при размонтировании
-    return () => unsubscribe();
-  }, [dispatch]);
+        return () => unsubscribe();
+    }, [dispatch]);
+
+    return {
+        user,
+        loading,
+        authChecked
+    };
 };

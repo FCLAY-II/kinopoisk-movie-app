@@ -11,10 +11,10 @@ export const cleanDescription = (description: string): string => {
     if (!description) return '';
 
     return description
-        .replace(/\s+/g, ' ')           // Заменяем множественные пробелы на один
-        .replace(/\n+/g, ' ')          // Заменяем переносы строк на пробелы
-        .replace(/\t+/g, ' ')          // Заменяем табуляции на пробелы
-        .trim();                       // Убираем пробелы в начале и конце
+        .replace(/\s+/g, ' ') // Заменяем множественные пробелы на один
+        .replace(/\n+/g, ' ') // Заменяем переносы строк на пробелы
+        .replace(/\t+/g, ' ') // Заменяем табуляции на пробелы
+        .trim();
 };
 
 export const truncateDescription = (description: string, maxLength: number = 600): string => {

@@ -92,6 +92,16 @@ const Header: React.FC = () => {
                   Избранное
                 </a>
               </li>
+              <li>
+                <a
+                    href="/profile"
+                    className={`${s.navLink} ${isActiveRoute('/profile') ? s.active : ''}`}
+                >
+                  <User size={18} />
+                  Профиль
+                </a>
+              </li>
+
             </ul>
           </nav>
 
