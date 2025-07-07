@@ -16,3 +16,15 @@ export const cleanDescription = (description: string): string => {
         .replace(/\t+/g, ' ')          // Заменяем табуляции на пробелы
         .trim();                       // Убираем пробелы в начале и конце
 };
+
+export const truncateDescription = (description: string, maxLength: number = 600): string => {
+    if (!description || description.length <= maxLength) return description;
+
+    const truncated = description.substring(0, maxLength);
+    const lastSpace = truncated.lastIndexOf(' ');
+
+    return lastSpace > maxLength * 0.8
+        ? truncated.substring(0, lastSpace) + '...'
+        : truncated + '...';
+};
+

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Star, Calendar, Film, Eye, Clock } from 'lucide-react';
 import s from './MovieCard.module.scss';
 import {MovieCardProps} from "@/componets/MovieCard/types";
-import {formatRating, formatYear, cleanDescription} from "@/utils/common";
+import {formatRating, formatYear, cleanDescription, truncateDescription} from "@/utils/common";
 
 const MovieCard = ({ movie }: MovieCardProps) => {
     const [imageLoading, setImageLoading] = useState(true);
@@ -125,7 +125,7 @@ const MovieCard = ({ movie }: MovieCardProps) => {
                         <div className={s.descriptionTooltip}>
                             <div className={s.tooltipContent}>
                                 <h4 className={s.tooltipTitle}>{movie.nameRu || movie.nameEn}</h4>
-                                <p className={s.tooltipDescription}>{cleanedDescription}</p>
+                                <p className={s.tooltipDescription}>{truncateDescription(cleanedDescription)}</p>
                             </div>
                         </div>
                     </div>
