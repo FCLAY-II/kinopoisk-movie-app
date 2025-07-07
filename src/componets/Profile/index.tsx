@@ -11,12 +11,9 @@ import {
     Eye,
     EyeOff
 } from 'lucide-react';
-import {
-    reauthenticateUser,
-    resendEmailVerification
-} from '@/lib/firebase/auth';
 import { updateProfile, updateEmail, updatePassword } from 'firebase/auth';
 import s from './Profile.module.scss';
+import {reauthenticateUser, resendEmailVerification} from "@/lib/firebase/auth";
 
 const Profile: React.FC = () => {
     const router = useRouter();
@@ -77,16 +74,23 @@ const Profile: React.FC = () => {
 
         setIsLoading(true);
         try {
-            await reauthenticateUser(user, formData.currentPassword);
+            const authResult = await reauthenticateUser(user, formData.currentPassword);
+            if (!authResult.success) {
+                if (authResult.error?.code === 'auth/wrong-password') {
+                    showMessage('error', 'Неверный текущий пароль');
+                } else {
+                    showMessage('error', 'Ошибка при подтверждении пароля');
+                }
+                return;
+            }
+
             await updateEmail(user, formData.email);
             setIsEditingEmail(false);
             setFormData(prev => ({ ...prev, currentPassword: '' }));
             showMessage('success', 'Email успешно обновлен! Проверьте почту для подтверждения.');
         } catch (error: any) {
             console.error('Email update error:', error);
-            if (error.code === 'auth/wrong-password') {
-                showMessage('error', 'Неверный текущий пароль');
-            } else if (error.code === 'auth/email-already-in-use') {
+            if (error.code === 'auth/email-already-in-use') {
                 showMessage('error', 'Этот email уже используется');
             } else {
                 showMessage('error', 'Ошибка при обновлении email');
@@ -95,6 +99,8 @@ const Profile: React.FC = () => {
             setIsLoading(false);
         }
     };
+
+
 
     const handleUpdatePassword = async () => {
         if (!user || !formData.currentPassword || !formData.newPassword || !formData.confirmPassword) return;
@@ -111,18 +117,23 @@ const Profile: React.FC = () => {
 
         setIsLoading(true);
         try {
-            await reauthenticateUser(user, formData.currentPassword);
+            const authResult = await reauthenticateUser(user, formData.currentPassword);
+            if (!authResult.success) {
+                if (authResult.error?.code === 'auth/wrong-password') {
+                    showMessage('error', 'Неверный текущий пароль');
+                } else {
+                    showMessage('error', 'Ошибка при подтверждении пароля');
+                }
+                return;
+            }
+
             await updatePassword(user, formData.newPassword);
             setIsEditingPassword(false);
             setFormData(prev => ({ ...prev, currentPassword: '', newPassword: '', confirmPassword: '' }));
             showMessage('success', 'Пароль успешно обновлен!');
         } catch (error: any) {
             console.error('Password update error:', error);
-            if (error.code === 'auth/wrong-password') {
-                showMessage('error', 'Неверный текущий пароль');
-            } else {
-                showMessage('error', 'Ошибка при обновлении пароля');
-            }
+            showMessage('error', 'Ошибка при обновлении пароля');
         } finally {
             setIsLoading(false);
         }
@@ -133,8 +144,12 @@ const Profile: React.FC = () => {
 
         setIsLoading(true);
         try {
-            await resendEmailVerification(user);
-            showMessage('success', 'Письмо с подтверждением отправлено!');
+            const result = await resendEmailVerification(user);
+            if (result.success) {
+                showMessage('success', 'Письмо с подтверждением отправлено!');
+            } else {
+                showMessage('error', 'Ошибка при отправке письма');
+            }
         } catch (error) {
             console.error('Resend verification error:', error);
             showMessage('error', 'Ошибка при отправке письма');

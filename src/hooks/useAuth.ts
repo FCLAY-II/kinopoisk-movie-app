@@ -8,8 +8,8 @@ import {
     selectUserLoading,
     selectAuthChecked 
 } from '@/redux/features/user/userSlice';
-import { subscribeToAuthState } from '@/lib/firebase/auth';
 import { User } from 'firebase/auth';
+import {subscribeToAuthState} from "@/lib/firebase/auth";
 
 export const useAuth = () => {
     const dispatch = useAppDispatch();

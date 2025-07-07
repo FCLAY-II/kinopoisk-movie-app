@@ -2,85 +2,157 @@ import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     signOut as firebaseSignOut,
-    onAuthStateChanged,
-    UserCredential,
     sendEmailVerification,
-    EmailAuthProvider,
+    sendPasswordResetEmail,
     reauthenticateWithCredential,
-    User
+    EmailAuthProvider,
+    User,
+    UserCredential, onAuthStateChanged
 } from 'firebase/auth';
 import { auth } from './config';
-import type { AuthError, FirebaseUser } from './types';
+
+export interface AuthResult {
+    success: boolean;
+    user?: User;
+    error?: any;
+}
+
+// Безопасная обертка для Firebase операций
+const safeAsyncWrapper = async <T>(
+    operation: () => Promise<T>
+): Promise<{ success: boolean; data?: T; error?: any }> => {
+    try {
+        const data = await operation();
+        return { success: true, data };
+    } catch (error) {
+        // Полностью поглощаем ошибку, не даем ей всплыть
+        console.error('Firebase operation failed:', error);
+        return { success: false, error };
+    }
+};
 
 /**
- * Функция для регистрации пользователя
+ * Безопасная функция для входа пользователя
  */
-export const handleSignUp = async (email: string, password: string): Promise<FirebaseUser> => {
-    try {
-        const userCredential: UserCredential = await createUserWithEmailAndPassword(auth, email, password);
+export const handleSignIn = async (email: string, password: string): Promise<AuthResult> => {
+    const result = await safeAsyncWrapper(async () => {
+        return await signInWithEmailAndPassword(auth, email, password);
+    });
 
+    if (result.success && result.data) {
+        return {
+            success: true,
+            user: result.data.user
+        };
+    }
+
+    return {
+        success: false,
+        error: result.error
+    };
+};
+
+/**
+ * Безопасная функция для регистрации пользователя
+ */
+export const handleSignUp = async (email: string, password: string): Promise<AuthResult> => {
+    const result = await safeAsyncWrapper(async () => {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         // Отправляем email для верификации
         await sendEmailVerification(userCredential.user);
+        return userCredential;
+    });
 
-        return userCredential.user;
-    } catch (error) {
-        console.error('Error during sign-up:', error);
-        throw error as AuthError;
+    if (result.success && result.data) {
+        return {
+            success: true,
+            user: result.data.user
+        };
     }
-};
 
-
-/**
- * Функция для входа пользователя
- */
-export const handleSignIn = async (email: string, password: string): Promise<FirebaseUser> => {
-    try {
-        const userCredential: UserCredential = await signInWithEmailAndPassword(auth, email, password);
-        return userCredential.user;
-    } catch (error) {
-        console.error('Error during sign-in:', error);
-        throw error as AuthError;
-    }
+    return {
+        success: false,
+        error: result.error
+    };
 };
 
 /**
- * Функция для выхода пользователя
+ * Безопасная функция для выхода пользователя
  */
-export const handleSignOut = async (): Promise<void> => {
-    try {
+export const handleSignOut = async (): Promise<AuthResult> => {
+    const result = await safeAsyncWrapper(async () => {
         await firebaseSignOut(auth);
-    } catch (error) {
-        console.error('Sign-out error:', error);
-        throw error as AuthError;
+        return true;
+    });
+
+    if (result.success) {
+        return { success: true };
     }
+
+    return {
+        success: false,
+        error: result.error
+    };
 };
 
 /**
- * Повторная аутентификация пользователя
+ * Безопасная отправка email для сброса пароля
  */
-export const reauthenticateUser = async (user: User, password: string): Promise<void> => {
-    try {
+export const handlePasswordReset = async (email: string): Promise<AuthResult> => {
+    const result = await safeAsyncWrapper(async () => {
+        await sendPasswordResetEmail(auth, email);
+        return true;
+    });
+
+    if (result.success) {
+        return { success: true };
+    }
+
+    return {
+        success: false,
+        error: result.error
+    };
+};
+
+/**
+ * Безопасная повторная аутентификация пользователя
+ */
+export const reauthenticateUser = async (user: User, password: string): Promise<AuthResult> => {
+    const result = await safeAsyncWrapper(async () => {
         const credential = EmailAuthProvider.credential(user.email!, password);
         await reauthenticateWithCredential(user, credential);
-    } catch (error) {
-        console.error('Error during reauthentication:', error);
-        throw error as AuthError;
+        return true;
+    });
+
+    if (result.success) {
+        return { success: true };
     }
+
+    return {
+        success: false,
+        error: result.error
+    };
 };
 
 /**
- * Повторная отправка email верификации
+ * Безопасная повторная отправка email верификации
  */
-export const resendEmailVerification = async (user: User): Promise<void> => {
-    try {
+export const resendEmailVerification = async (user: User): Promise<AuthResult> => {
+    const result = await safeAsyncWrapper(async () => {
         await sendEmailVerification(user);
-    } catch (error) {
-        console.error('Error resending email verification:', error);
-        throw error as AuthError;
+        return true;
+    });
+
+    if (result.success) {
+        return { success: true };
     }
+
+    return {
+        success: false,
+        error: result.error
+    };
 };
 
-
-export const subscribeToAuthState = (callback: (user: FirebaseUser | null) => void): (() => void) => {
+export const subscribeToAuthState = (callback: (user: User | null) => void): (() => void) => {
     return onAuthStateChanged(auth, callback);
 };
