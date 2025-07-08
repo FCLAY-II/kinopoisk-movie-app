@@ -4,11 +4,18 @@ import s from './MovieCard.module.scss';
 import { MovieCardProps } from "@/componets/MovieCard/types";
 import { formatRating, formatYear, cleanDescription, truncateDescription } from "@/utils/common";
 import { useFavorites } from "@/hooks/useFavorites";
+import {useRouter} from "next/router";
 
 const MovieCard = memo(({ movie, className }: MovieCardProps) => {
+    const router = useRouter();
     const { isFavorite, toggleFavorite } = useFavorites();
     const [isTogglingFavorite, setIsTogglingFavorite] = useState(false);
     const [imageLoading, setImageLoading] = useState(true);
+
+    const handleCardClick = () => {
+        router.push(`/movie/${movie.filmId}`);
+    };
+
 
     const handleFavoriteClick = async (e: React.MouseEvent) => {
         e.preventDefault();
@@ -68,7 +75,7 @@ const MovieCard = memo(({ movie, className }: MovieCardProps) => {
     const isMovieFavorite = isFavorite(movie.filmId);
 
     return (
-        <div className={`${s.card} ${className || ''}`}>
+        <div className={`${s.card} ${className || ''}`} onClick={handleCardClick} style={{cursor: "pointer"}}>
             <div className={s.imageWrapper}>
                 {imageLoading && (
                     <div className={s.loader}>
