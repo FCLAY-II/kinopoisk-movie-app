@@ -4,7 +4,6 @@ import { useRouter } from 'next/router';
 import MainLayout from '@/componets/Layout/MainLayout';
 import MoviePage from '@/componets/MoviePage';
 import { IMovie } from '@/componets/MovieCard/types';
-import { Loading } from '@/componets/Loading';
 import {filmSearchService} from "@/services/api/kinopoisk";
 
 interface MoviePageProps {
@@ -14,14 +13,6 @@ interface MoviePageProps {
 
 const MoviePageWrapper: React.FC<MoviePageProps> = ({ movie, error }) => {
   const router = useRouter();
-
-  if (router.isFallback) {
-    return (
-      <MainLayout>
-        <Loading text="Загрузка фильма..." />
-      </MainLayout>
-    );
-  }
 
   if (error || !movie) {
     return (

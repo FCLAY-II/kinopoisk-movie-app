@@ -1,10 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {FavoritesState} from "@/types/favorites";
-import {
-  addToFavoritesThunk,
-  loadFavoritesThunk,
-  removeFromFavoritesThunk
-} from "@/redux/features/favorites/thunks/favoritesThunks";
+import {loadFavoritesThunk} from "@/redux/features/favorites/thunks/loadFavoritesThunk";
+import {addToFavoritesThunk} from "@/redux/features/favorites/thunks/addToFavoritesThunk";
+import {removeFromFavoritesThunk} from "@/redux/features/favorites/thunks/removeFromFavoritesThunk";
 
 interface ExtendedFavoritesState extends FavoritesState {
   isLoaded: boolean;
@@ -70,7 +68,6 @@ const favoritesSlice = createSlice({
         state.error = action.payload || 'Ошибка добавления в избранное';
       })
       
-    // Remove from favorites
     builder
       .addCase(removeFromFavoritesThunk.pending, (state) => {
         state.error = null;

@@ -323,11 +323,19 @@
   gap: 8px;
   padding: 16px 20px;
   border-radius: 12px;
+
+  @media (max-width: 768px) {
+    padding: 8px 10px;
+  }
 }
 
 .ratingValue {
   font-size: 24px;
   font-weight: 700;
+
+  @media (max-width: 768px) {
+    font-size: 20px;
+  }
 }
 
 .ratingInfo {

@@ -8,11 +8,9 @@ import {
   selectFavoritesCount
 } from '@/redux/features/favorites/favoritesSlice';
 import { IMovie } from '@/componets/MovieCard/types';
-import {
-  addToFavoritesThunk,
-  loadFavoritesThunk,
-  removeFromFavoritesThunk
-} from "@/redux/features/favorites/thunks/favoritesThunks";
+import {loadFavoritesThunk} from "@/redux/features/favorites/thunks/loadFavoritesThunk";
+import {addToFavoritesThunk} from "@/redux/features/favorites/thunks/addToFavoritesThunk";
+import {removeFromFavoritesThunk} from "@/redux/features/favorites/thunks/removeFromFavoritesThunk";
 
 export const useFavorites = () => {
   const dispatch = useAppDispatch();

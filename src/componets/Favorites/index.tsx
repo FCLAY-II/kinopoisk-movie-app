@@ -78,10 +78,6 @@ const Favorites: React.FC = () => {
     }
   };
 
-  if (!authChecked) {
-    return <Loading text="Проверка авторизации..." />;
-  }
-
   if (!user) {
     return (
       <div className={s.errorContainer}>
