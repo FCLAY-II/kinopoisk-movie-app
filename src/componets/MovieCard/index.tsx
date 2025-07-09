@@ -170,7 +170,7 @@ const MovieCard = memo(({ movie, className }: MovieCardProps) => {
                         <div className={s.descriptionTooltip}>
                             <div className={s.tooltipContent}>
                                 <h4 className={s.tooltipTitle}>{movie.nameRu || movie.nameEn}</h4>
-                                <p className={s.tooltipDescription}>{cleanedDescription}</p>
+                                <p className={s.tooltipDescription}>{truncateDescription(cleanedDescription)}</p>
                             </div>
                         </div>
                     </div>

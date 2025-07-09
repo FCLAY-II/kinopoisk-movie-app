@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useRef, useState} from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from '@/hooks/useAuth';
 import { useFavorites } from '@/hooks/useFavorites';
@@ -19,6 +19,7 @@ import { formatRating, formatYear, cleanDescription } from '@/utils/common';
 import UserReview from './UserReview';
 import s from './MoviePage.module.scss';
 import ReviewStats from "@/componets/MoviePage/ReviewStats";
+import cn from "classnames";
 
 interface MoviePageProps {
   movie: IMovie;
@@ -28,6 +29,7 @@ const MoviePage: React.FC<MoviePageProps> = ({ movie }) => {
   const router = useRouter();
   const { user } = useAuth();
   const { isFavorite, toggleFavorite } = useFavorites();
+  const reviewRef = useRef<HTMLDivElement | null>(null);
   const [isTogglingFavorite, setIsTogglingFavorite] = useState(false);
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -37,6 +39,12 @@ const MoviePage: React.FC<MoviePageProps> = ({ movie }) => {
         setStatsKey(prev => prev + 1); // Принудительно обновляем статистику
     };
 
+    const scrollToReview = () => {
+    setShowReviewForm(true);
+    setTimeout(() => {
+      reviewRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+  };
 
 
     const handleFavoriteToggle = async () => {
@@ -204,9 +212,9 @@ const MoviePage: React.FC<MoviePageProps> = ({ movie }) => {
             </button>
 
             <button
-              onClick={() => setShowReviewForm(true)}
+              onClick={scrollToReview}
               disabled={!user}
-              className={`${s.actionButton} ${s.reviewButton}`}
+              className={cn(s.actionButton, s.reviewButton)}
             >
               <MessageCircle size={20} />
               Оставить отзыв
@@ -251,12 +259,10 @@ const MoviePage: React.FC<MoviePageProps> = ({ movie }) => {
           </div>
         </div>
       </div>
-
         <ReviewStats key={statsKey} movieId={movie.filmId} />
 
-
         {/* Отзывы пользователей */}
-      <div className={s.reviewsSection}>
+      <div className={s.reviewsSection} ref={reviewRef}>
         <h2 className={s.sectionTitle}>Мой отзыв</h2>
         <UserReview 
           movieId={movie.filmId}
