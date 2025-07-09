@@ -5,8 +5,7 @@ import {
     clearUser, 
     setAuthChecked,
     selectUser, 
-    selectUserLoading,
-    selectAuthChecked 
+    selectAuthChecked
 } from '@/redux/features/user/userSlice';
 import { User } from 'firebase/auth';
 import {subscribeToAuthState} from "@/lib/firebase/auth";
@@ -14,7 +13,6 @@ import {subscribeToAuthState} from "@/lib/firebase/auth";
 export const useAuth = () => {
     const dispatch = useAppDispatch();
     const user = useAppSelector(selectUser);
-    const loading = useAppSelector(selectUserLoading);
     const authChecked = useAppSelector(selectAuthChecked);
 
     useEffect(() => {
@@ -33,7 +31,6 @@ export const useAuth = () => {
 
     return {
         user,
-        loading,
         authChecked
     };
 };

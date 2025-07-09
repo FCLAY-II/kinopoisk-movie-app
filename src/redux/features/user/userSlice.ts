@@ -6,13 +6,11 @@ import {User} from "firebase/auth";
 interface UserState {
     user: User | null;
     authChecked: boolean; //для отслеживания инициализации
-    loading: boolean;
 }
 
 const initialState: UserState = {
-    user: null,  // Здесь будем хранить информацию о текущем пользователе
-    authChecked: false, // Новый флаг для отслеживания инициализации
-    loading: true,
+    user: null,
+    authChecked: false,
 };
 
 const userSlice = createSlice({
@@ -20,17 +18,12 @@ const userSlice = createSlice({
     initialState,
     reducers: {
         setUser: (state, action) => {
-            state.user = action.payload;  // Устанавливаем данные пользователя
+            state.user = action.payload;
             state.authChecked = true;
-            state.loading = false;
         },
         clearUser: (state) => {
-            state.user = null;  // Очищаем данные пользователя
+            state.user = null;
             state.authChecked = true;
-            state.loading = false;
-        },
-        setLoading: (state, action: PayloadAction<boolean>) => {
-            state.loading = action.payload;
         },
         setAuthChecked: (state, action: PayloadAction<boolean>) => {
             state.authChecked = action.payload;
@@ -42,6 +35,5 @@ export const { setUser, clearUser, setAuthChecked } = userSlice.actions;
 
 export const selectUser = (state: RootState) => state.user.user;
 export const selectAuthChecked = (state: RootState) => state.user.authChecked;
-export const selectUserLoading = (state: RootState) => state.user.loading;
 
 export default userSlice.reducer;
