@@ -15,7 +15,7 @@ export const filmSearchService = {
                     page,
                 },
             });
-            return data.films || [];
+            return data.films ?? [];
         } catch (error) {
             if (error instanceof AxiosError) {
                 const errorMessage = error.response?.data?.message || 'Произошла ошибка при поиске фильмов';
@@ -36,18 +36,18 @@ export const filmSearchService = {
                 nameRu: data.nameRu,
                 nameEn: data.nameEn,
                 type: data.type,
-                year: data.year?.toString() || '',
+                year: `${data.year ?? ''}`,
                 description: data.description,
                 filmLength: data.filmLength ? `${data.filmLength} мин` : '',
-                countries: data.countries || [],
-                genres: data.genres || [],
-                rating: data.ratingKinopoisk?.toString() || '',
-                ratingVoteCount: data.ratingKinopoiskVoteCount || 0,
+                countries: data.countries ?? [],
+                genres: data.genres ?? [],
+                rating: `${data.ratingKinopoisk ?? ''}`,
+                ratingVoteCount: data.ratingKinopoiskVoteCount ?? 0,
                 posterUrl: data.posterUrl,
                 posterUrlPreview: data.posterUrlPreview,
             };
         } catch (error) {
-            throw handleApiError(error); // у тебя уже есть такая функция
+            throw handleApiError(error);
         }
     }
 };

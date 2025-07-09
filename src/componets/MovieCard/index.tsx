@@ -6,6 +6,7 @@ import { formatRating, formatYear, cleanDescription, truncateDescription } from 
 import { useFavorites } from "@/hooks/useFavorites";
 import {useRouter} from "next/router";
 import cn from 'classnames';
+import {getRatingClass, getTypeIcon, getTypeLabel} from "@/utils/moviesView";
 
 const MovieCard = memo(({ movie, className }: MovieCardProps) => {
     const router = useRouter();
@@ -34,39 +35,6 @@ const MovieCard = memo(({ movie, className }: MovieCardProps) => {
 
     const handleImageLoad = () => {
         setImageLoading(false);
-    };
-
-    const getTypeIcon = (type: string) => {
-        switch (type) {
-            case 'TV_SERIES':
-                return <Film size={14} />;
-            case 'TV_SHOW':
-                return <Eye size={14} />;
-            case 'MINI_SERIES':
-                return <Film size={14} />;
-            default:
-                return <Film size={14} />;
-        }
-    };
-
-    const getTypeLabel = (type: string) => {
-        switch (type) {
-            case 'TV_SERIES':
-                return 'Сериал';
-            case 'TV_SHOW':
-                return 'Шоу';
-            case 'MINI_SERIES':
-                return 'Мини-сериал';
-            default:
-                return 'Фильм';
-        }
-    };
-
-    const getRatingClass = (rating: string) => {
-        const numRating = parseFloat(rating);
-        if (numRating >= 7) return s.ratingGood;
-        if (numRating >= 5) return s.ratingAverage;
-        return s.ratingBad;
     };
 
     // Очищаем описание от лишних пробелов

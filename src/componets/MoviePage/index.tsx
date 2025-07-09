@@ -16,10 +16,11 @@ import {
 } from 'lucide-react';
 import { IMovie } from '@/componets/MovieCard/types';
 import { formatRating, formatYear, cleanDescription } from '@/utils/common';
-import UserReview from './UserReview';
 import s from './MoviePage.module.scss';
-import ReviewStats from "@/componets/MoviePage/ReviewStats";
 import cn from "classnames";
+import ReviewStats from "@/componets/MoviePage/components/ReviewStats";
+import UserReview from "@/componets/MoviePage/components/UserReview";
+import {getRatingClass, getTypeIcon, getTypeLabel} from "@/utils/moviesView";
 
 interface MoviePageProps {
   movie: IMovie;
@@ -72,41 +73,7 @@ const MoviePage: React.FC<MoviePageProps> = ({ movie }) => {
     } else {
       // Fallback - копируем URL в буфер обмена
       await navigator.clipboard.writeText(window.location.href);
-      // Можно добавить toast уведомление
     }
-  };
-
-  const getTypeIcon = (type: string) => {
-    switch (type) {
-      case 'TV_SERIES':
-        return <Film size={20} />;
-      case 'TV_SHOW':
-        return <Eye size={20} />;
-      case 'MINI_SERIES':
-        return <Film size={20} />;
-      default:
-        return <Film size={20} />;
-    }
-  };
-
-  const getTypeLabel = (type: string) => {
-    switch (type) {
-      case 'TV_SERIES':
-        return 'Сериал';
-      case 'TV_SHOW':
-        return 'Шоу';
-      case 'MINI_SERIES':
-        return 'Мини-сериал';
-      default:
-        return 'Фильм';
-    }
-  };
-
-  const getRatingClass = (rating: string) => {
-    const numRating = parseFloat(rating);
-    if (numRating >= 7) return s.ratingGood;
-    if (numRating >= 5) return s.ratingAverage;
-    return s.ratingBad;
   };
 
   const cleanedDescription = cleanDescription(movie.description);
