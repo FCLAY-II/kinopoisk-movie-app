@@ -57,7 +57,7 @@ export const handleSignIn = async (email: string, password: string): Promise<Aut
  */
 export const handleSignUp = async (email: string, password: string): Promise<AuthResult> => {
     const result = await safeAsyncWrapper(async () => {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const userCredential: UserCredential = await createUserWithEmailAndPassword(auth, email, password);
         // Отправляем email для верификации
         await sendEmailVerification(userCredential.user);
         return userCredential;

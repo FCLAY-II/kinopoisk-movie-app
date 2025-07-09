@@ -5,6 +5,7 @@ import { MovieCardProps } from "@/componets/MovieCard/types";
 import { formatRating, formatYear, cleanDescription, truncateDescription } from "@/utils/common";
 import { useFavorites } from "@/hooks/useFavorites";
 import {useRouter} from "next/router";
+import cn from 'classnames';
 
 const MovieCard = memo(({ movie, className }: MovieCardProps) => {
     const router = useRouter();
@@ -75,7 +76,7 @@ const MovieCard = memo(({ movie, className }: MovieCardProps) => {
     const isMovieFavorite = isFavorite(movie.filmId);
 
     return (
-        <div className={`${s.card} ${className || ''}`} onClick={handleCardClick} style={{cursor: "pointer"}}>
+        <div className={cn(s.card, className)} onClick={handleCardClick}>
             <div className={s.imageWrapper}>
                 {imageLoading && (
                     <div className={s.loader}>
