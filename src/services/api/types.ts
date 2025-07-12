@@ -1,4 +1,4 @@
 export interface SearchMoviesParams {
-    query: string;
-    page?: number;
+  query: string;
+  page?: number;
 }

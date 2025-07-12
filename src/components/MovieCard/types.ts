@@ -7,7 +7,7 @@ export interface IMovie {
   filmId: number;
   nameRu: string;
   nameEn: string;
-  type: 'FILM' | 'TV_SERIES' | 'TV_SHOW' | 'MINI_SERIES';
+  type: "FILM" | "TV_SERIES" | "TV_SHOW" | "MINI_SERIES";
   year: string;
   description: string;
   filmLength: string;

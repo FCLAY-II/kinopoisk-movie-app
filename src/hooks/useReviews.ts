@@ -1,16 +1,16 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useAuth } from './useAuth';
-import { 
-  getUserReview, 
-  saveUserReview, 
-  deleteUserReview, 
+import { useState, useEffect, useCallback } from "react";
+import { useAuth } from "./useAuth";
+import {
+  getUserReview,
+  saveUserReview,
+  deleteUserReview,
   getMovieReviews,
   getMovieReviewStats,
   getUserReviews,
-  Review, 
-  ReviewInput, 
-  ReviewStats 
-} from '@/lib/firebase/reviews';
+  Review,
+  ReviewInput,
+  ReviewStats,
+} from "@/lib/firebase/reviews";
 
 export const useUserReview = (movieId: number) => {
   const { user } = useAuth();
@@ -24,36 +24,42 @@ export const useUserReview = (movieId: number) => {
 
     setLoading(true);
     setError(null);
-    
+
     try {
       const userReview = await getUserReview(user.uid, movieId);
       setReview(userReview);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Ошибка при загрузке отзыва');
+      setError(
+        err instanceof Error ? err.message : "Ошибка при загрузке отзыва",
+      );
     } finally {
       setLoading(false);
     }
   }, [user, movieId]);
 
   // Сохранение отзыва
-  const saveReview = useCallback(async (reviewInput: ReviewInput) => {
-    if (!user) throw new Error('Пользователь не авторизован');
+  const saveReview = useCallback(
+    async (reviewInput: ReviewInput) => {
+      if (!user) throw new Error("Пользователь не авторизован");
 
-    setLoading(true);
-    setError(null);
-    
-    try {
-      const savedReview = await saveUserReview(user, reviewInput);
-      setReview(savedReview);
-      return savedReview;
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Ошибка при сохранении отзыва';
-      setError(errorMessage);
-      throw new Error(errorMessage);
-    } finally {
-      setLoading(false);
-    }
-  }, [user]);
+      setLoading(true);
+      setError(null);
+
+      try {
+        const savedReview = await saveUserReview(user, reviewInput);
+        setReview(savedReview);
+        return savedReview;
+      } catch (err) {
+        const errorMessage =
+          err instanceof Error ? err.message : "Ошибка при сохранении отзыва";
+        setError(errorMessage);
+        throw new Error(errorMessage);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [user],
+  );
 
   // Удаление отзыва
   const deleteReview = useCallback(async () => {
@@ -61,12 +67,13 @@ export const useUserReview = (movieId: number) => {
 
     setLoading(true);
     setError(null);
-    
+
     try {
       await deleteUserReview(review.id);
       setReview(null);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Ошибка при удалении отзыва';
+      const errorMessage =
+        err instanceof Error ? err.message : "Ошибка при удалении отзыва";
       setError(errorMessage);
       throw new Error(errorMessage);
     } finally {
@@ -84,7 +91,7 @@ export const useUserReview = (movieId: number) => {
     error,
     saveReview,
     deleteReview,
-    reloadReview: loadReview
+    reloadReview: loadReview,
   };
 };
 
@@ -99,17 +106,19 @@ export const useMovieReviews = (movieId: number, limitCount: number = 10) => {
 
     setLoading(true);
     setError(null);
-    
+
     try {
       const [movieReviews, reviewStats] = await Promise.all([
         getMovieReviews(movieId, limitCount),
-        getMovieReviewStats(movieId)
+        getMovieReviewStats(movieId),
       ]);
-      
+
       setReviews(movieReviews);
       setStats(reviewStats);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Ошибка при загрузке отзывов');
+      setError(
+        err instanceof Error ? err.message : "Ошибка при загрузке отзывов",
+      );
     } finally {
       setLoading(false);
     }
@@ -124,7 +133,7 @@ export const useMovieReviews = (movieId: number, limitCount: number = 10) => {
     stats,
     loading,
     error,
-    reloadReviews: loadReviews
+    reloadReviews: loadReviews,
   };
 };
 
@@ -141,12 +150,14 @@ export const useUserReviews = (userId?: string, limitCount: number = 20) => {
 
     setLoading(true);
     setError(null);
-    
+
     try {
       const userReviews = await getUserReviews(targetUserId, limitCount);
       setReviews(userReviews);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Ошибка при загрузке отзывов');
+      setError(
+        err instanceof Error ? err.message : "Ошибка при загрузке отзывов",
+      );
     } finally {
       setLoading(false);
     }
@@ -160,6 +171,6 @@ export const useUserReviews = (userId?: string, limitCount: number = 20) => {
     reviews,
     loading,
     error,
-    reloadReviews: loadReviews
+    reloadReviews: loadReviews,
   };
 };

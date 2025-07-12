@@ -1,9 +1,9 @@
-import { useEffect } from 'react';
-import { useRouter } from 'next/router';
-import { useAppSelector } from '@/redux/hooks';
-import { selectUser, selectAuthChecked } from '@/redux/features/user/userSlice';
-import {Loading} from "@/components/Loading";
-import React from 'react';
+import { useEffect } from "react";
+import { useRouter } from "next/router";
+import { useAppSelector } from "@/redux/hooks";
+import { selectUser, selectAuthChecked } from "@/redux/features/user/userSlice";
+import { Loading } from "@/components/Loading";
+import React from "react";
 
 const HomePage = () => {
   const router = useRouter();
@@ -13,9 +13,9 @@ const HomePage = () => {
   useEffect(() => {
     if (authChecked) {
       if (user) {
-        router.replace('/search-movies');
+        router.replace("/search-movies");
       } else {
-        router.replace('/auth');
+        router.replace("/auth");
       }
     }
   }, [user, authChecked, router]);

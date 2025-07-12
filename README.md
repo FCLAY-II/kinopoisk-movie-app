@@ -10,6 +10,7 @@
 - Firebase Authentication
 - Tailwind CSS
 - Kinopoisk API
+- ESLint + Prettier
 
 ## Функционал
 - Авторизация пользователей

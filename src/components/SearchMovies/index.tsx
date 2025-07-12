@@ -1,23 +1,23 @@
-import React, {useState, FormEvent, useEffect, useRef} from 'react';
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import {clearMovies} from '@/redux/features/movies/moviesSlice';
-import styles from './SearchMovies.module.scss';
-import {getFilmsByKeyWordsThunk} from "@/redux/features/movies/thunks/getFilmsByKeyWordsThunk";
-import {useDebounce} from "@/hooks/useDebounce";
+import React, { useState, FormEvent, useEffect, useRef } from "react";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { clearMovies } from "@/redux/features/movies/moviesSlice";
+import styles from "./SearchMovies.module.scss";
+import { getFilmsByKeyWordsThunk } from "@/redux/features/movies/thunks/getFilmsByKeyWordsThunk";
+import { useDebounce } from "@/hooks/useDebounce";
 
 const SearchMovies: React.FC = () => {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const debouncedQuery = useDebounce(query, 1500); // Уменьшил время
-  const lastSearchRef = useRef<string>(''); // Отслеживаем последний поиск
+  const lastSearchRef = useRef<string>(""); // Отслеживаем последний поиск
   const dispatch = useAppDispatch();
-  const { loading } = useAppSelector(state => state.movies);
+  const { loading } = useAppSelector((state) => state.movies);
 
   // Функция для выполнения поиска
   const performSearch = (searchQuery: string) => {
     if (!searchQuery.trim() || searchQuery === lastSearchRef.current) {
       return;
     }
-    
+
     lastSearchRef.current = searchQuery;
     dispatch(clearMovies());
     dispatch(getFilmsByKeyWordsThunk({ query: searchQuery.trim() }));
@@ -55,7 +55,7 @@ const SearchMovies: React.FC = () => {
           className={styles.submitButton}
           disabled={loading || !query.trim()}
         >
-          {loading ? 'Поиск...' : 'Найти'}
+          {loading ? "Поиск..." : "Найти"}
         </button>
       </form>
     </div>

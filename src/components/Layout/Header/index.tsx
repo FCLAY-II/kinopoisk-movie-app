@@ -1,25 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
-import { useAppSelector, useAppDispatch } from '@/redux/hooks';
-import {selectUser, setUser} from '@/redux/features/user/userSlice';
-import {
-  Film, 
-  Heart, 
-  LogOut,
-  Menu, 
-  X,
-  User,
-  Search,
-} from 'lucide-react';
-import MobileMenu from './MobileMenu';
-import s from './Header.module.scss';
-import {handleSignOut} from "@/lib/firebase/auth";
+import React, { useEffect } from "react";
+import { useRouter } from "next/router";
+import Link from "next/link";
+import { useAppSelector, useAppDispatch } from "@/redux/hooks";
+import { selectUser, setUser } from "@/redux/features/user/userSlice";
+import { Film, Heart, LogOut, Menu, X, User, Search } from "lucide-react";
+import MobileMenu from "./MobileMenu";
+import s from "./Header.module.scss";
+import { handleSignOut } from "@/lib/firebase/auth";
+import { useToggle } from "@/hooks/useToggle";
 
 const Header: React.FC = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileMenuOpen, toggleMobileMenu, setIsMobileMenuOpen] = useToggle();
 
   // Закрываем мобильное меню при изменении маршрута
   useEffect(() => {
@@ -29,7 +23,7 @@ const Header: React.FC = () => {
   // Закрываем мобильное меню при клике вне его
   useEffect(() => {
     // Проверяем, что мы в браузере
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
     const handleClickOutside = () => {
       if (isMobileMenuOpen) {
@@ -37,17 +31,17 @@ const Header: React.FC = () => {
       }
     };
 
-    document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
   }, [isMobileMenuOpen]);
 
   const handleLogout = async () => {
     try {
       await handleSignOut();
       dispatch(setUser(null));
-      router.push('/auth');
+      router.push("/auth");
     } catch (error) {
-      console.error('Ошибка при выходе:', error);
+      console.error("Ошибка при выходе:", error);
     }
   };
 
@@ -55,52 +49,51 @@ const Header: React.FC = () => {
     return router.pathname === path;
   };
 
-  const toggleMobileMenu = (e: React.MouseEvent) => {
+  const handleToggleMobileMenu = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setIsMobileMenuOpen(!isMobileMenuOpen);
+    toggleMobileMenu();
   };
 
   return (
     <>
       <header className={s.header}>
         <div className={s.container}>
-          <a href="/search-movies" className={s.logo}>
+          <Link href="/search-movies" className={s.logo}>
             <div className={s.logoIcon}>
               <Film size={20} />
             </div>
             <span className={s.logoText}>КиноПоиск</span>
-          </a>
+          </Link>
 
           <nav className={s.nav}>
             <ul className={s.navLinks}>
               <li>
-                <a
+                <Link
                   href="/search-movies"
-                  className={`${s.navLink} ${isActiveRoute('/search-movies') ? s.active : ''}`}
+                  className={`${s.navLink} ${isActiveRoute("/search-movies") ? s.active : ""}`}
                 >
                   <Search size={18} />
                   Поиск фильмов
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   href="/favorites"
-                  className={`${s.navLink} ${isActiveRoute('/favorites') ? s.active : ''}`}
+                  className={`${s.navLink} ${isActiveRoute("/favorites") ? s.active : ""}`}
                 >
                   <Heart size={18} />
                   Избранное
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                    href="/profile"
-                    className={`${s.navLink} ${isActiveRoute('/profile') ? s.active : ''}`}
+                <Link
+                  href="/profile"
+                  className={`${s.navLink} ${isActiveRoute("/profile") ? s.active : ""}`}
                 >
                   <User size={18} />
                   Профиль
-                </a>
+                </Link>
               </li>
-
             </ul>
           </nav>
 
@@ -115,10 +108,7 @@ const Header: React.FC = () => {
                 </span>
               </div>
             )}
-            <button
-              onClick={handleLogout}
-              className={s.logoutButton}
-            >
+            <button onClick={handleLogout} className={s.logoutButton}>
               <LogOut size={16} />
               Выйти
             </button>
@@ -126,7 +116,7 @@ const Header: React.FC = () => {
 
           <button
             className={s.mobileMenuButton}
-            onClick={toggleMobileMenu}
+            onClick={handleToggleMobileMenu}
           >
             {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>

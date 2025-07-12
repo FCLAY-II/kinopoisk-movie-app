@@ -1,8 +1,8 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import {FavoritesState} from "@/types/favorites";
-import {loadFavoritesThunk} from "@/redux/features/favorites/thunks/loadFavoritesThunk";
-import {addToFavoritesThunk} from "@/redux/features/favorites/thunks/addToFavoritesThunk";
-import {removeFromFavoritesThunk} from "@/redux/features/favorites/thunks/removeFromFavoritesThunk";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { FavoritesState } from "@/types/favorites";
+import { loadFavoritesThunk } from "@/redux/features/favorites/thunks/loadFavoritesThunk";
+import { addToFavoritesThunk } from "@/redux/features/favorites/thunks/addToFavoritesThunk";
+import { removeFromFavoritesThunk } from "@/redux/features/favorites/thunks/removeFromFavoritesThunk";
 
 interface ExtendedFavoritesState extends FavoritesState {
   isLoaded: boolean;
@@ -12,11 +12,11 @@ const initialState: ExtendedFavoritesState = {
   favorites: [],
   loading: false,
   error: null,
-  isLoaded: false
+  isLoaded: false,
 };
 
 const favoritesSlice = createSlice({
-  name: 'favorites',
+  name: "favorites",
   initialState,
   reducers: {
     setLoading: (state, action: PayloadAction<boolean>) => {
@@ -30,7 +30,7 @@ const favoritesSlice = createSlice({
       state.loading = false;
       state.error = null;
       state.isLoaded = false;
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -49,37 +49,41 @@ const favoritesSlice = createSlice({
       })
       .addCase(loadFavoritesThunk.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || 'Ошибка загрузки избранного';
+        state.error = action.payload || "Ошибка загрузки избранного";
         state.isLoaded = true;
-      })
-      
+      });
+
     builder
       .addCase(addToFavoritesThunk.pending, (state) => {
         state.error = null;
       })
       .addCase(addToFavoritesThunk.fulfilled, (state, action) => {
-        const exists = state.favorites.some(fav => fav.filmId === action.payload.filmId);
+        const exists = state.favorites.some(
+          (fav) => fav.filmId === action.payload.filmId,
+        );
         if (!exists) {
           state.favorites.unshift(action.payload);
         }
         state.error = null;
       })
       .addCase(addToFavoritesThunk.rejected, (state, action) => {
-        state.error = action.payload || 'Ошибка добавления в избранное';
-      })
-      
+        state.error = action.payload || "Ошибка добавления в избранное";
+      });
+
     builder
       .addCase(removeFromFavoritesThunk.pending, (state) => {
         state.error = null;
       })
       .addCase(removeFromFavoritesThunk.fulfilled, (state, action) => {
-        state.favorites = state.favorites.filter(fav => fav.filmId !== action.payload);
+        state.favorites = state.favorites.filter(
+          (fav) => fav.filmId !== action.payload,
+        );
         state.error = null;
       })
       .addCase(removeFromFavoritesThunk.rejected, (state, action) => {
-        state.error = action.payload || 'Ошибка удаления из избранного';
+        state.error = action.payload || "Ошибка удаления из избранного";
       });
-  }
+  },
 });
 
 export const { setLoading, setError, clearFavorites } = favoritesSlice.actions;
@@ -87,7 +91,14 @@ export const { setLoading, setError, clearFavorites } = favoritesSlice.actions;
 export default favoritesSlice.reducer;
 
 // Селекторы
-export const selectFavorites = (state: { favorites: ExtendedFavoritesState }) => state.favorites.favorites;
-export const selectFavoritesLoading = (state: { favorites: ExtendedFavoritesState }) => state.favorites.loading;
-export const selectFavoritesError = (state: { favorites: ExtendedFavoritesState }) => state.favorites.error;
-export const selectFavoritesCount = (state: { favorites: ExtendedFavoritesState }) => state.favorites.favorites.length;
+export const selectFavorites = (state: { favorites: ExtendedFavoritesState }) =>
+  state.favorites.favorites;
+export const selectFavoritesLoading = (state: {
+  favorites: ExtendedFavoritesState;
+}) => state.favorites.loading;
+export const selectFavoritesError = (state: {
+  favorites: ExtendedFavoritesState;
+}) => state.favorites.error;
+export const selectFavoritesCount = (state: {
+  favorites: ExtendedFavoritesState;
+}) => state.favorites.favorites.length;

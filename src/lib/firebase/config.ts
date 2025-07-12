@@ -1,22 +1,22 @@
-import {FirebaseApp, initializeApp} from "firebase/app";
-import {Auth, getAuth} from "firebase/auth";
-import {FirebaseConfig} from "@/lib/firebase/types";
-import { getFirestore } from 'firebase/firestore';
-
-
+import { FirebaseApp, initializeApp } from "firebase/app";
+import { Auth, getAuth } from "firebase/auth";
+import { FirebaseConfig } from "@/lib/firebase/types";
+import { getFirestore } from "firebase/firestore";
 
 if (!process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
-    throw new Error('Missing Firebase configuration. Please check your .env.local file');
+  throw new Error(
+    "Missing Firebase configuration. Please check your .env.local file",
+  );
 }
 
 const firebaseConfig: FirebaseConfig = {
-    apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-    authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-    projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-    storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-    messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-    appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-    measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 } as const;
 
 // Инициализируем Firebase

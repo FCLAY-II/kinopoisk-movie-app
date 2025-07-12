@@ -1,5 +1,6 @@
 import React from 'react';
-import Profile from '@/components/Profile';
+import dynamic from 'next/dynamic';
+const Profile = dynamic(() => import('@/components/Profile'));
 import MainLayout from "@/components/Layout/MainLayout";
 
 const ProfilePage: React.FC = () => {

@@ -1,6 +1,9 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import {IMovie} from "@/components/MovieCard/types";
-import {FetchMoviesResponse, getFilmsByKeyWordsThunk} from "@/redux/features/movies/thunks/getFilmsByKeyWordsThunk";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { IMovie } from "@/components/MovieCard/types";
+import {
+  FetchMoviesResponse,
+  getFilmsByKeyWordsThunk,
+} from "@/redux/features/movies/thunks/getFilmsByKeyWordsThunk";
 
 interface MoviesState {
   moviesList: IMovie[];
@@ -13,17 +16,17 @@ const initialState: MoviesState = {
   moviesList: [],
   loading: false,
   error: null,
-  searchQuery: '',
+  searchQuery: "",
 };
 
 const moviesSlice = createSlice({
-  name: 'movies',
+  name: "movies",
   initialState,
   reducers: {
     clearMovies: (state) => {
       state.moviesList = [];
       state.error = null;
-      state.searchQuery = '';
+      state.searchQuery = "";
     },
     resetMoviesState: () => initialState,
     setLoading: (state, action) => {
@@ -36,17 +39,22 @@ const moviesSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(getFilmsByKeyWordsThunk.fulfilled, (state, action: PayloadAction<FetchMoviesResponse>) => {
-        state.loading = false;
-        state.moviesList = action.payload.movies;
-        state.searchQuery = action.payload.query;
-      })
+      .addCase(
+        getFilmsByKeyWordsThunk.fulfilled,
+        (state, action: PayloadAction<FetchMoviesResponse>) => {
+          state.loading = false;
+          state.moviesList = action.payload.movies;
+          state.searchQuery = action.payload.query;
+        },
+      )
       .addCase(getFilmsByKeyWordsThunk.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message ?? 'Произошла ошибка при поиске фильмов';
+        state.error =
+          action.error.message ?? "Произошла ошибка при поиске фильмов";
       });
   },
 });
 
-export const { clearMovies, resetMoviesState, setLoading} = moviesSlice.actions;
+export const { clearMovies, resetMoviesState, setLoading } =
+  moviesSlice.actions;
 export default moviesSlice.reducer;

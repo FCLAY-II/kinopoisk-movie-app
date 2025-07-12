@@ -1,7 +1,7 @@
-import {User} from "@/types/user";
+import { User } from "firebase/auth";
 
 export interface MobileMenuProps {
-    isOpen: boolean;
-    user: User | null;
-    onLogout: () => void;
+  isOpen: boolean;
+  user: User | null;
+  onLogout: () => void;
 }

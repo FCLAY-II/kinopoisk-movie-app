@@ -1,16 +1,16 @@
-import { useEffect, useCallback, useMemo } from 'react';
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { selectUser } from '@/redux/features/user/userSlice';
+import { useEffect, useCallback, useMemo } from "react";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { selectUser } from "@/redux/features/user/userSlice";
 import {
   selectFavorites,
   selectFavoritesLoading,
   selectFavoritesError,
-  selectFavoritesCount
-} from '@/redux/features/favorites/favoritesSlice';
-import { IMovie } from '@/components/MovieCard/types';
-import {loadFavoritesThunk} from "@/redux/features/favorites/thunks/loadFavoritesThunk";
-import {addToFavoritesThunk} from "@/redux/features/favorites/thunks/addToFavoritesThunk";
-import {removeFromFavoritesThunk} from "@/redux/features/favorites/thunks/removeFromFavoritesThunk";
+  selectFavoritesCount,
+} from "@/redux/features/favorites/favoritesSlice";
+import { IMovie } from "@/components/MovieCard/types";
+import { loadFavoritesThunk } from "@/redux/features/favorites/thunks/loadFavoritesThunk";
+import { addToFavoritesThunk } from "@/redux/features/favorites/thunks/addToFavoritesThunk";
+import { removeFromFavoritesThunk } from "@/redux/features/favorites/thunks/removeFromFavoritesThunk";
 
 export const useFavorites = () => {
   const dispatch = useAppDispatch();
@@ -29,39 +29,51 @@ export const useFavorites = () => {
     }
   }, [dispatch, userId]);
 
-  const addToFavorites = useCallback(async (movie: IMovie): Promise<boolean> => {
-    if (!userId) return false;
-    
-    try {
-      await dispatch(addToFavoritesThunk({ userId, movie })).unwrap();
-      return true;
-    } catch {
-      return false;
-    }
-  }, [dispatch, userId]);
+  const addToFavorites = useCallback(
+    async (movie: IMovie): Promise<boolean> => {
+      if (!userId) return false;
 
-  const removeFromFavorites = useCallback(async (filmId: number): Promise<boolean> => {
-    if (!userId) return false;
-    
-    try {
-      await dispatch(removeFromFavoritesThunk({ userId, filmId })).unwrap();
-      return true;
-    } catch {
-      return false;
-    }
-  }, [dispatch, userId]);
+      try {
+        await dispatch(addToFavoritesThunk({ userId, movie })).unwrap();
+        return true;
+      } catch {
+        return false;
+      }
+    },
+    [dispatch, userId],
+  );
 
-  const isFavorite = useCallback((filmId: number): boolean => {
-    return favorites.some(fav => fav.filmId === filmId);
-  }, [favorites]);
+  const removeFromFavorites = useCallback(
+    async (filmId: number): Promise<boolean> => {
+      if (!userId) return false;
 
-  const toggleFavorite = useCallback(async (movie: IMovie): Promise<boolean> => {
-    if (isFavorite(movie.filmId)) {
-      return await removeFromFavorites(movie.filmId);
-    } else {
-      return await addToFavorites(movie);
-    }
-  }, [isFavorite, addToFavorites, removeFromFavorites]);
+      try {
+        await dispatch(removeFromFavoritesThunk({ userId, filmId })).unwrap();
+        return true;
+      } catch {
+        return false;
+      }
+    },
+    [dispatch, userId],
+  );
+
+  const isFavorite = useCallback(
+    (filmId: number): boolean => {
+      return favorites.some((fav) => fav.filmId === filmId);
+    },
+    [favorites],
+  );
+
+  const toggleFavorite = useCallback(
+    async (movie: IMovie): Promise<boolean> => {
+      if (isFavorite(movie.filmId)) {
+        return await removeFromFavorites(movie.filmId);
+      } else {
+        return await addToFavorites(movie);
+      }
+    },
+    [isFavorite, addToFavorites, removeFromFavorites],
+  );
 
   return {
     favorites,
@@ -71,6 +83,6 @@ export const useFavorites = () => {
     addToFavorites,
     removeFromFavorites,
     isFavorite,
-    toggleFavorite
+    toggleFavorite,
   };
 };

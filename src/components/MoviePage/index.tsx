@@ -1,24 +1,24 @@
-import React, {useRef, useState} from 'react';
-import { useRouter } from 'next/router';
-import { useAuth } from '@/hooks/useAuth';
-import { useFavorites } from '@/hooks/useFavorites';
+import React, { useRef, useState } from "react";
+import { useRouter } from "next/router";
+import { useAuth } from "@/hooks/useAuth";
+import { useFavorites } from "@/hooks/useFavorites";
 import {
-  Star, 
-  Calendar, 
-  Clock, 
-  Globe, 
-  Heart, 
-  MessageCircle, 
+  Star,
+  Calendar,
+  Clock,
+  Globe,
+  Heart,
+  MessageCircle,
   Share2,
   ArrowLeft,
-} from 'lucide-react';
-import { IMovie } from '@/components/MovieCard/types';
-import { formatRating, formatYear, cleanDescription } from '@/utils/common';
-import s from './MoviePage.module.scss';
+} from "lucide-react";
+import { IMovie } from "@/components/MovieCard/types";
+import { formatRating, formatYear, cleanDescription } from "@/utils/common";
+import s from "./MoviePage.module.scss";
 import cn from "classnames";
 import ReviewStats from "@/components/MoviePage/components/ReviewStats";
 import UserReview from "@/components/MoviePage/components/UserReview";
-import {getRatingClass, getTypeIcon, getTypeLabel} from "@/utils/moviesView";
+import { getRatingClass, getTypeIcon, getTypeLabel } from "@/utils/moviesView";
 
 interface MoviePageProps {
   movie: IMovie;
@@ -34,19 +34,18 @@ const MoviePage: React.FC<MoviePageProps> = ({ movie }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [statsKey, setStatsKey] = useState(0);
 
-    const handleReviewChange = () => {
-        setStatsKey(prev => prev + 1); // Принудительно обновляем статистику
-    };
+  const handleReviewChange = () => {
+    setStatsKey((prev) => prev + 1); // Принудительно обновляем статистику
+  };
 
-    const scrollToReview = () => {
+  const scrollToReview = () => {
     setShowReviewForm(true);
     setTimeout(() => {
-      reviewRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      reviewRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     }, 100);
   };
 
-
-    const handleFavoriteToggle = async () => {
+  const handleFavoriteToggle = async () => {
     if (isTogglingFavorite || !user) return;
 
     setIsTogglingFavorite(true);
@@ -66,7 +65,7 @@ const MoviePage: React.FC<MoviePageProps> = ({ movie }) => {
           url: window.location.href,
         });
       } catch (error) {
-        console.log('Sharing failed:', error);
+        console.log("Sharing failed:", error);
       }
     } else {
       // Fallback - копируем URL в буфер обмена
@@ -80,10 +79,7 @@ const MoviePage: React.FC<MoviePageProps> = ({ movie }) => {
   return (
     <div className={s.moviePage}>
       {/* Кнопка "Назад" */}
-      <button 
-        onClick={() => router.back()}
-        className={s.backButton}
-      >
+      <button onClick={() => router.back()} className={s.backButton}>
         <ArrowLeft size={20} />
         Назад
       </button>
@@ -104,10 +100,12 @@ const MoviePage: React.FC<MoviePageProps> = ({ movie }) => {
               onLoad={() => setImageLoaded(true)}
               loading="lazy"
             />
-            
+
             {/* Рейтинг на постере */}
             {movie.rating && (
-              <div className={`${s.posterRating} ${getRatingClass(movie.rating)}`}>
+              <div
+                className={`${s.posterRating} ${getRatingClass(movie.rating)}`}
+              >
                 <Star size={16} fill="currentColor" />
                 <span>{formatRating(movie.rating)}</span>
               </div>
@@ -121,7 +119,7 @@ const MoviePage: React.FC<MoviePageProps> = ({ movie }) => {
             {movie.nameRu && movie.nameEn && (
               <p className={s.originalTitle}>{movie.nameEn}</p>
             )}
-            
+
             <div className={s.typeAndYear}>
               <span className={s.typeLabel}>
                 {getTypeIcon(movie.type)}
@@ -142,11 +140,11 @@ const MoviePage: React.FC<MoviePageProps> = ({ movie }) => {
                 <span>{movie.filmLength}</span>
               </div>
             )}
-            
+
             {movie.countries && movie.countries.length > 0 && (
               <div className={s.metaItem}>
                 <Globe size={16} />
-                <span>{movie.countries.map(c => c.country).join(', ')}</span>
+                <span>{movie.countries.map((c) => c.country).join(", ")}</span>
               </div>
             )}
           </div>
@@ -167,13 +165,13 @@ const MoviePage: React.FC<MoviePageProps> = ({ movie }) => {
             <button
               onClick={handleFavoriteToggle}
               disabled={isTogglingFavorite || !user}
-              className={`${s.actionButton} ${s.favoriteButton} ${isMovieFavorite ? s.active : ''}`}
+              className={`${s.actionButton} ${s.favoriteButton} ${isMovieFavorite ? s.active : ""}`}
             >
-              <Heart 
-                size={20} 
-                fill={isMovieFavorite ? 'currentColor' : 'none'}
+              <Heart
+                size={20}
+                fill={isMovieFavorite ? "currentColor" : "none"}
               />
-              {isMovieFavorite ? 'В избранном' : 'В избранное'}
+              {isMovieFavorite ? "В избранном" : "В избранное"}
             </button>
 
             <button
@@ -211,7 +209,9 @@ const MoviePage: React.FC<MoviePageProps> = ({ movie }) => {
           <div className={s.officialRating}>
             <div className={`${s.ratingBadge} ${getRatingClass(movie.rating)}`}>
               <Star size={24} fill="currentColor" />
-              <span className={s.ratingValue}>{formatRating(movie.rating)}</span>
+              <span className={s.ratingValue}>
+                {formatRating(movie.rating)}
+              </span>
             </div>
             <div className={s.ratingInfo}>
               <p className={s.ratingLabel}>Официальный рейтинг</p>
@@ -224,12 +224,12 @@ const MoviePage: React.FC<MoviePageProps> = ({ movie }) => {
           </div>
         </div>
       </div>
-        <ReviewStats key={statsKey} movieId={movie.filmId} />
+      <ReviewStats key={statsKey} movieId={movie.filmId} />
 
-        {/* Отзывы пользователей */}
+      {/* Отзывы пользователей */}
       <div className={s.reviewsSection} ref={reviewRef}>
         <h2 className={s.sectionTitle}>Мой отзыв</h2>
-        <UserReview 
+        <UserReview
           movieId={movie.filmId}
           showForm={showReviewForm}
           onCloseForm={() => setShowReviewForm(false)}
