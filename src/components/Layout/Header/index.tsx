@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useAppSelector, useAppDispatch } from '@/redux/hooks';
-import { selectUser } from '@/redux/features/user/userSlice';
-import { clearUser } from '@/redux/features/user/userSlice';
-import { 
+import {selectUser, setUser} from '@/redux/features/user/userSlice';
+import {
   Film, 
   Heart, 
   LogOut,
@@ -45,7 +44,7 @@ const Header: React.FC = () => {
   const handleLogout = async () => {
     try {
       await handleSignOut();
-      dispatch(clearUser());
+      dispatch(setUser(null));
       router.push('/auth');
     } catch (error) {
       console.error('Ошибка при выходе:', error);

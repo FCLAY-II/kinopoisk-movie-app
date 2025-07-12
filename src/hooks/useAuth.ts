@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { 
     setUser, 
-    clearUser, 
     setAuthChecked,
     selectUser, 
     selectAuthChecked
@@ -20,7 +19,7 @@ export const useAuth = () => {
             if (firebaseUser) {
                 dispatch(setUser(firebaseUser));
             } else {
-                dispatch(clearUser());
+                dispatch(setUser(null));
             }
             // Важно: устанавливаем authChecked в true после первого срабатывания onAuthStateChanged
             dispatch(setAuthChecked(true));
