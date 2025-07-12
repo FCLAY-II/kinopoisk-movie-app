@@ -89,7 +89,7 @@ const Auth: React.FC = () => {
         switch (errorCode) {
             case 'auth/user-not-found':
                 return 'Пользователь с таким email не найден';
-            case 'auth/wrong-password':
+            case 'auth/invalid-login-credentials':
                 return 'Неверный пароль. Проверьте правильность ввода';
             case 'auth/invalid-email':
                 return 'Некорректный формат email';
