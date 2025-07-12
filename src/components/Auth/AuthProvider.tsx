@@ -1,12 +1,11 @@
 import React from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { useAppSelector } from "@/redux/hooks";
-import { selectAuthChecked } from "@/redux/features/user/userSlice";
 import { Loading } from "@/components/Loading";
+import {useAuthListener} from "@/hooks/useAuthListener";
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  useAuth(); // Подключаем слушатель авторизации
-  const authChecked = useAppSelector(selectAuthChecked);
+  useAuthListener();
+  const { authChecked } = useAuth();
 
   if (!authChecked) {
     return (

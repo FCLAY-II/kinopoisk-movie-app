@@ -11,8 +11,6 @@ import {
   MessageCircle, 
   Share2,
   ArrowLeft,
-  Film,
-  Eye,
 } from 'lucide-react';
 import { IMovie } from '@/components/MovieCard/types';
 import { formatRating, formatYear, cleanDescription } from '@/utils/common';

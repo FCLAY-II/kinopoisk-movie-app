@@ -17,7 +17,7 @@ type SortOption = 'addedAt' | 'rating' | 'year' | 'name';
 type ViewMode = 'grid' | 'list';
 
 const Favorites: React.FC = () => {
-  const { user, authChecked } = useAuth();
+  const { user } = useAuth();
   const { favorites, loading, error } = useFavorites();
   
   const [searchQuery, setSearchQuery] = useState('');
