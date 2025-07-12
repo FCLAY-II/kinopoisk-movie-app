@@ -1,7 +1,7 @@
 import React from 'react';
 import MovieCard from '../MovieCard';
 import { useAppSelector } from '@/redux/hooks';
-import {IMovie} from "@/componets/MovieCard/types";
+import {IMovie} from "@/components/MovieCard/types";
 import s from './MovieList.module.scss';
 
 const MovieList = () => {

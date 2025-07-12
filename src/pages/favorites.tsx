@@ -1,7 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
-import Favorites from '@/componets/Favorites';
-import MainLayout from "@/componets/Layout/MainLayout";
+import Favorites from '@/components/Favorites';
+import MainLayout from "@/components/Layout/MainLayout";
 
 const FavoritesPage: React.FC = () => {
   return (

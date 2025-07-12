@@ -1,7 +1,7 @@
 import {handleApiError, kinopoiskApi} from '@/services/api/baseApi';
 import { AxiosError } from 'axios';
 import { SearchMoviesParams } from '@/services/api/types';
-import { IMovie } from '@/componets/MovieCard/types';
+import { IMovie } from '@/components/MovieCard/types';
 import {SearchResponse} from "@/types/movie";
 
 

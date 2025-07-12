@@ -1,9 +1,9 @@
 import React, {useEffect} from 'react';
 import { useRouter } from 'next/router';
 import { useAppSelector } from '@/redux/hooks';
-import SearchMovies from '@/componets/SearchMovies';
-import MovieList from '@/componets/MovieList';
-import MainLayout from "@/componets/Layout/MainLayout";
+import SearchMovies from '@/components/SearchMovies';
+import MovieList from '@/components/MovieList';
+import MainLayout from "@/components/Layout/MainLayout";
 
 const SearchMoviesPage: React.FC = () => {
   const router = useRouter();

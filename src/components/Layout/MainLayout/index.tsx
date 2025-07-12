@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Header from '../Header';
-import { Loading } from '@/componets/Loading';
+import { Loading } from '@/components/Loading';
 import s from './MainLayout.module.scss';
 
 interface MainLayoutProps {

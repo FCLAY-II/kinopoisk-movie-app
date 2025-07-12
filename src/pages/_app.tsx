@@ -1,7 +1,7 @@
 import type { AppProps } from 'next/app';
 import { Provider } from 'react-redux';
 import { store } from '@/redux/store';
-import { AuthProvider } from "@/componets/Auth/AuthProvider";
+import { AuthProvider } from "@/components/Auth/AuthProvider";
 import React from 'react';
 import "@/styles/globals.css";
 

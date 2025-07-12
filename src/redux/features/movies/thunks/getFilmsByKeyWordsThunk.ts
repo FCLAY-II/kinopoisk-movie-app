@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { filmSearchService } from '@/services/api/kinopoisk';
 import { handleApiError } from '@/services/api/baseApi';
-import { IMovie } from '@/componets/MovieCard/types';
+import { IMovie } from '@/components/MovieCard/types';
 
 export interface FetchMoviesParams {
     query: string;

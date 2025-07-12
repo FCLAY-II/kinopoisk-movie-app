@@ -1,7 +1,7 @@
 import React, { useState, memo } from 'react';
 import { Star, Calendar, Film, Eye, Clock, Heart } from 'lucide-react';
 import s from './MovieCard.module.scss';
-import { MovieCardProps } from "@/componets/MovieCard/types";
+import { MovieCardProps } from "@/components/MovieCard/types";
 import { formatRating, formatYear, cleanDescription, truncateDescription } from "@/utils/common";
 import { useFavorites } from "@/hooks/useFavorites";
 import {useRouter} from "next/router";

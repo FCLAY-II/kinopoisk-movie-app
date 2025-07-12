@@ -1,9 +1,9 @@
 import React from 'react';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import MainLayout from '@/componets/Layout/MainLayout';
-import MoviePage from '@/componets/MoviePage';
-import { IMovie } from '@/componets/MovieCard/types';
+import MainLayout from '@/components/Layout/MainLayout';
+import MoviePage from '@/components/MoviePage';
+import { IMovie } from '@/components/MovieCard/types';
 import {filmSearchService} from "@/services/api/kinopoisk";
 
 interface MoviePageProps {

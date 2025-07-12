@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useFavorites } from '@/hooks/useFavorites';
-import MovieCard from '@/componets/MovieCard';
-import { Loading } from '@/componets/Loading';
+import MovieCard from '@/components/MovieCard';
+import { Loading } from '@/components/Loading';
 import { 
   Heart, 
   Search, 

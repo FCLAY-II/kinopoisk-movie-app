@@ -1,6 +1,6 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {FavoriteMovie} from "@/types/favorites";
-import {IMovie} from "@/componets/MovieCard/types";
+import {IMovie} from "@/components/MovieCard/types";
 import * as favoritesApi from "@/services/api/favorites";
 
 export const addToFavoritesThunk = createAsyncThunk<

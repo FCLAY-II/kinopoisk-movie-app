@@ -7,7 +7,7 @@ import {
   selectFavoritesError,
   selectFavoritesCount
 } from '@/redux/features/favorites/favoritesSlice';
-import { IMovie } from '@/componets/MovieCard/types';
+import { IMovie } from '@/components/MovieCard/types';
 import {loadFavoritesThunk} from "@/redux/features/favorites/thunks/loadFavoritesThunk";
 import {addToFavoritesThunk} from "@/redux/features/favorites/thunks/addToFavoritesThunk";
 import {removeFromFavoritesThunk} from "@/redux/features/favorites/thunks/removeFromFavoritesThunk";

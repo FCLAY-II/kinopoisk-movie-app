@@ -7,7 +7,7 @@ import {
   Search, User,
 } from 'lucide-react';
 import s from './MobileMenu.module.scss';
-import {MobileMenuProps} from "@/componets/Layout/Header/MobileMenu/types";
+import {MobileMenuProps} from "@/components/Layout/Header/MobileMenu/types";
 
 const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, user, onLogout }) => {
   const router = useRouter();

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useUserReview } from '@/hooks/useReviews';
 import { Star, MessageCircle, Edit2, Trash2 } from 'lucide-react';
-import { Loading } from '@/componets/Loading';
+import { Loading } from '@/components/Loading';
 import s from './UserReview.module.scss';
 
 interface UserReviewProps {

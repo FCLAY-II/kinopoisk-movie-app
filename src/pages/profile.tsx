@@ -1,6 +1,6 @@
 import React from 'react';
-import Profile from '@/componets/Profile';
-import MainLayout from "@/componets/Layout/MainLayout";
+import Profile from '@/components/Profile';
+import MainLayout from "@/components/Layout/MainLayout";
 
 const ProfilePage: React.FC = () => {
     return (

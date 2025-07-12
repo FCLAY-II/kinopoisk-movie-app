@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import {IMovie} from "@/componets/MovieCard/types";
+import {IMovie} from "@/components/MovieCard/types";
 import {FetchMoviesResponse, getFilmsByKeyWordsThunk} from "@/redux/features/movies/thunks/getFilmsByKeyWordsThunk";
 
 interface MoviesState {

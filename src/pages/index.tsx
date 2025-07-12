@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useAppSelector } from '@/redux/hooks';
 import { selectUser, selectAuthChecked } from '@/redux/features/user/userSlice';
-import {Loading} from "@/componets/Loading";
+import {Loading} from "@/components/Loading";
 import React from 'react';
 
 const HomePage = () => {

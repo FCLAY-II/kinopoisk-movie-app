@@ -14,12 +14,12 @@ import {
   Film,
   Eye,
 } from 'lucide-react';
-import { IMovie } from '@/componets/MovieCard/types';
+import { IMovie } from '@/components/MovieCard/types';
 import { formatRating, formatYear, cleanDescription } from '@/utils/common';
 import s from './MoviePage.module.scss';
 import cn from "classnames";
-import ReviewStats from "@/componets/MoviePage/components/ReviewStats";
-import UserReview from "@/componets/MoviePage/components/UserReview";
+import ReviewStats from "@/components/MoviePage/components/ReviewStats";
+import UserReview from "@/components/MoviePage/components/UserReview";
 import {getRatingClass, getTypeIcon, getTypeLabel} from "@/utils/moviesView";
 
 interface MoviePageProps {

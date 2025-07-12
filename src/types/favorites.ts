@@ -1,4 +1,4 @@
-import { IMovie } from '@/componets/MovieCard/types';
+import { IMovie } from '@/components/MovieCard/types';
 
 export interface FavoriteMovie extends IMovie {
     addedAt: number;

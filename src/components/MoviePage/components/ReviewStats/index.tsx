@@ -1,7 +1,7 @@
 import React from 'react';
 import { Star, Users } from 'lucide-react';
 import { useMovieReviews } from '@/hooks/useReviews';
-import { Loading } from '@/componets/Loading';
+import { Loading } from '@/components/Loading';
 import s from './ReviewStats.module.scss';
 
 interface ReviewStatsProps {

@@ -9,7 +9,7 @@ import {
   serverTimestamp,
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
-import { IMovie } from '@/componets/MovieCard/types';
+import { IMovie } from '@/components/MovieCard/types';
 import {FavoriteMovie, FavoritesApiResult} from "@/types/favorites";
 
 const COLLECTION_NAME = 'favorites';
