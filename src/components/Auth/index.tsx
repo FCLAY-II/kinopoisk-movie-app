@@ -14,8 +14,7 @@ import {
     CheckCircle
 } from 'lucide-react';
 import s from './Auth.module.scss';
-import {handleSignIn, handleSignUp} from "@/lib/firebase";
-import {handlePasswordReset} from "@/lib/firebase/auth";
+import {handlePasswordReset, handleSignIn, handleSignUp} from "@/lib/firebase/auth";
 
 type AuthMode = 'signin' | 'signup' | 'reset';
 
@@ -64,10 +63,6 @@ const Auth: React.FC = () => {
         }
 
         if (mode === 'signup') {
-            if (!formData.displayName.trim()) {
-                showMessage('error', 'Введите имя');
-                return false;
-            }
             if (formData.password.length < 6) {
                 showMessage('error', 'Пароль должен содержать минимум 6 символов');
                 return false;
@@ -141,8 +136,8 @@ const Auth: React.FC = () => {
                     setFormData(prev => ({ ...prev, password: '' }));
                 }
             } else if (mode === 'signup') {
-                result = await handleSignUp(formData.email, formData.password);
-                
+                result = await handleSignUp(formData.email, formData.password, formData?.displayName);
+
                 if (result.success) {
                     showMessage('success', 'Регистрация успешна! Проверьте почту для подтверждения email.');
                     

@@ -7,14 +7,17 @@ import {
     reauthenticateWithCredential,
     EmailAuthProvider,
     User,
-    UserCredential, onAuthStateChanged
+    UserCredential,
+    onAuthStateChanged,
+    updateProfile,
+    AuthError
 } from 'firebase/auth';
 import { auth } from './config';
 
 export interface AuthResult {
     success: boolean;
     user?: User;
-    error?: unknown;
+    error?: AuthError;
 }
 
 /**
@@ -28,7 +31,7 @@ export const handleSignIn = async (
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         return { success: true, user: userCredential.user };
     } catch (error) {
-        return { success: false, error };
+        return { success: false, error: error as AuthError  };
     }
 };
 
@@ -38,6 +41,7 @@ export const handleSignIn = async (
 export const handleSignUp = async (
     email: string,
     password: string,
+    displayName?: string,
 ): Promise<AuthResult> => {
     try {
         const userCredential: UserCredential = await createUserWithEmailAndPassword(
@@ -45,9 +49,14 @@ export const handleSignUp = async (
             email,
             password,
         );
+
+        if (displayName) {
+            await updateProfile(userCredential.user, { displayName });
+        }
+
         return { success: true, user: userCredential.user };
     } catch (error) {
-        return { success: false, error };
+        return { success: false, error: error as AuthError  };
     }
 };
 
@@ -59,7 +68,7 @@ export const handleSignOut = async (): Promise<AuthResult> => {
             await firebaseSignOut(auth);
             return { success: true };
         } catch (error) {
-            return { success: false, error };
+            return { success: false, error: error as AuthError  };
         }
     };
 
@@ -71,7 +80,7 @@ export const handlePasswordReset = async (email: string): Promise<AuthResult> =>
             await sendPasswordResetEmail(auth, email);
             return { success: true };
         } catch (error) {
-            return { success: false, error };
+            return { success: false, error: error as AuthError  };
         }
     };
 
@@ -87,7 +96,7 @@ export const reauthenticateUser = async (
                 await reauthenticateWithCredential(user, credential);
                 return { success: true };
             } catch (error) {
-                return { success: false, error };
+                return { success: false, error: error as AuthError  };
             }
         };
 /**
@@ -99,7 +108,7 @@ export const resendEmailVerification = async (user: User): Promise<AuthResult> =
 
             return { success: true };
         } catch (error) {
-            return { success: false, error };
+            return { success: false, error: error as AuthError  };
         }
     };
 

@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import MobileMenu from './MobileMenu';
 import s from './Header.module.scss';
-import {handleSignOut} from "@/lib/firebase";
+import {handleSignOut} from "@/lib/firebase/auth";
 
 const Header: React.FC = () => {
   const router = useRouter();

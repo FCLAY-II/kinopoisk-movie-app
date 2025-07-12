@@ -14,10 +14,13 @@ import {
 import { updateProfile, updateEmail, updatePassword } from 'firebase/auth';
 import s from './Profile.module.scss';
 import {reauthenticateUser, resendEmailVerification} from "@/lib/firebase/auth";
+import {useAppDispatch} from "@/redux/hooks";
+import {setUser} from "@/redux/features/user/userSlice";
 
 const Profile: React.FC = () => {
     const router = useRouter();
     const { user } = useAuth();
+    const dispatch = useAppDispatch();
 
     const [isEditingProfile, setIsEditingProfile] = useState(false);
     const [isEditingEmail, setIsEditingEmail] = useState(false);
@@ -59,6 +62,7 @@ const Profile: React.FC = () => {
         setIsLoading(true);
         try {
             await updateProfile(user, { displayName: formData.displayName });
+            dispatch(setUser({ ...user }));
             setIsEditingProfile(false);
             showMessage('success', 'Профиль успешно обновлен!');
         } catch (error) {
