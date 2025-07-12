@@ -11,11 +11,14 @@ import {
     Eye,
     EyeOff
 } from 'lucide-react';
-import { updateProfile, updateEmail, updatePassword } from 'firebase/auth';
+import { updateProfile, updateEmail, updatePassword, User as FirebaseUser } from 'firebase/auth';
 import s from './Profile.module.scss';
 import {reauthenticateUser, resendEmailVerification} from "@/lib/firebase/auth";
 import {useAppDispatch} from "@/redux/hooks";
 import {setUser} from "@/redux/features/user/userSlice";
+
+const cloneFirebaseUser = (user: FirebaseUser): FirebaseUser =>
+    Object.assign(Object.create(Object.getPrototypeOf(user)), user);
 
 const Profile: React.FC = () => {
     const router = useRouter();
@@ -62,7 +65,7 @@ const Profile: React.FC = () => {
         setIsLoading(true);
         try {
             await updateProfile(user, { displayName: formData.displayName });
-            dispatch(setUser({ ...user }));
+            dispatch(setUser(cloneFirebaseUser(user)));
             setIsEditingProfile(false);
             showMessage('success', 'Профиль успешно обновлен!');
         } catch (error) {
