@@ -10,7 +10,6 @@ import {
   Heart,
   Eye,
   MessageCircle,
-  Share2,
   ArrowLeft,
 } from "lucide-react";
 import { IMovie } from "@/components/MovieCard/types";
@@ -68,23 +67,6 @@ const MoviePage: React.FC<MoviePageProps> = ({ movie }) => {
       await toggleWatched(movie);
     } finally {
       setIsTogglingWatched(false);
-    }
-  };
-
-  const handleShare = async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: movie.nameRu || movie.nameEn,
-          text: `Посмотрите этот фильм: ${movie.nameRu || movie.nameEn}`,
-          url: window.location.href,
-        });
-      } catch (error) {
-        console.log("Sharing failed:", error);
-      }
-    } else {
-      // Fallback - копируем URL в буфер обмена
-      await navigator.clipboard.writeText(window.location.href);
     }
   };
 
@@ -208,14 +190,6 @@ const MoviePage: React.FC<MoviePageProps> = ({ movie }) => {
             >
               <MessageCircle size={20} />
               Оставить отзыв
-            </button>
-
-            <button
-              onClick={handleShare}
-              className={`${s.actionButton} ${s.shareButton}`}
-            >
-              <Share2 size={20} />
-              Поделиться
             </button>
           </div>
         </div>
