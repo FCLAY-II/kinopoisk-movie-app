@@ -8,6 +8,7 @@ import {
   Clock,
   Globe,
   Heart,
+  Eye,
   MessageCircle,
   Share2,
   ArrowLeft,
@@ -19,6 +20,7 @@ import cn from "classnames";
 import ReviewStats from "@/components/MoviePage/components/ReviewStats";
 import UserReview from "@/components/MoviePage/components/UserReview";
 import { getRatingClass, getTypeIcon, getTypeLabel } from "@/utils/moviesView";
+import { useWatched } from "@/hooks/useWatched";
 
 interface MoviePageProps {
   movie: IMovie;
@@ -28,9 +30,11 @@ const MoviePage: React.FC<MoviePageProps> = ({ movie }) => {
   const router = useRouter();
   const { user } = useAuth();
   const { isFavorite, toggleFavorite } = useFavorites();
+  const { isWatched, toggleWatched } = useWatched();
   const reviewRef = useRef<HTMLDivElement | null>(null);
   const [isTogglingFavorite, setIsTogglingFavorite] = useState(false);
   const [showReviewForm, setShowReviewForm] = useState(false);
+  const [isTogglingWatched, setIsTogglingWatched] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [statsKey, setStatsKey] = useState(0);
 
@@ -56,6 +60,17 @@ const MoviePage: React.FC<MoviePageProps> = ({ movie }) => {
     }
   };
 
+  const handleWatchedToggle = async () => {
+    if (isTogglingWatched || !user) return;
+
+    setIsTogglingWatched(true);
+    try {
+      await toggleWatched(movie);
+    } finally {
+      setIsTogglingWatched(false);
+    }
+  };
+
   const handleShare = async () => {
     if (navigator.share) {
       try {
@@ -75,6 +90,9 @@ const MoviePage: React.FC<MoviePageProps> = ({ movie }) => {
 
   const cleanedDescription = cleanDescription(movie.description);
   const isMovieFavorite = isFavorite(movie.filmId);
+  const isMovieWatched = isWatched(movie.filmId);
+
+  console.log("isMovieWatched", isMovieWatched);
 
   return (
     <div className={s.moviePage}>
@@ -172,6 +190,15 @@ const MoviePage: React.FC<MoviePageProps> = ({ movie }) => {
                 fill={isMovieFavorite ? "currentColor" : "none"}
               />
               {isMovieFavorite ? "В избранном" : "В избранное"}
+            </button>
+
+            <button
+              onClick={handleWatchedToggle}
+              disabled={isTogglingWatched || !user}
+              className={`${s.actionButton} ${s.watchedButton} ${isMovieWatched ? s.active : ""}`}
+            >
+              <Eye size={20} />
+              {isMovieWatched ? "Просмотрено" : "Отметить просмотр"}
             </button>
 
             <button
