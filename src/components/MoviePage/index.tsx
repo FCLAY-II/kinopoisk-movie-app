@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { useAuth } from "@/hooks/useAuth";
 import { useFavorites } from "@/hooks/useFavorites";
@@ -29,7 +29,7 @@ const MoviePage: React.FC<MoviePageProps> = ({ movie }) => {
   const router = useRouter();
   const { user } = useAuth();
   const { isFavorite, toggleFavorite } = useFavorites();
-  const { isWatched, toggleWatched } = useWatched();
+  const { isWatched, toggleWatched, watched } = useWatched();
   const reviewRef = useRef<HTMLDivElement | null>(null);
   const [isTogglingFavorite, setIsTogglingFavorite] = useState(false);
   const [showReviewForm, setShowReviewForm] = useState(false);
@@ -70,11 +70,28 @@ const MoviePage: React.FC<MoviePageProps> = ({ movie }) => {
     }
   };
 
+  const lastWatchedMovie = useMemo(
+    () => watched.find((item) => item.filmId === movie.filmId),
+    [watched, movie.filmId],
+  );
+
+  const watchedAtDate = lastWatchedMovie?.watchedAt
+    ? new Date(lastWatchedMovie.watchedAt)
+    : null;
+  
+  function formatWatchedDate(date: Date) {
+    return date.toLocaleString("ru-RU", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  }
+
   const cleanedDescription = cleanDescription(movie.description);
   const isMovieFavorite = isFavorite(movie.filmId);
   const isMovieWatched = isWatched(movie.filmId);
-
-  console.log("isMovieWatched", isMovieWatched);
 
   return (
     <div className={s.moviePage}>
@@ -192,6 +209,16 @@ const MoviePage: React.FC<MoviePageProps> = ({ movie }) => {
               Оставить отзыв
             </button>
           </div>
+
+          {isMovieWatched && watchedAtDate && (
+            <div className={s.watchedInfo}>
+              <Eye size={18} className={s.watchedIcon} />
+              <span>
+                Последний раз просмотрено:{" "}
+                <b>{formatWatchedDate(watchedAtDate)}</b>
+              </span>
+            </div>
+          )}
         </div>
       </div>
 

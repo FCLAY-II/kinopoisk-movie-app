@@ -268,6 +268,37 @@
   }
 }
 
+.watchedInfo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  margin-bottom: 8px;
+  padding: 10px 16px;
+  background: linear-gradient(90deg, #f0fdfa 0%, #ccfbf1 100%);
+  border: 1.5px solid #10b981;
+  border-radius: 10px;
+  font-size: 15px;
+  color: #065f46;
+  font-weight: 500;
+
+  .watchedIcon {
+    color: #10b981;
+    flex-shrink: 0;
+  }
+
+  b {
+    font-weight: 700;
+    color: #047857;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+}
+
+
 .reviewButton {
   border-color: #3b82f6;
   background: #3b82f6;
