@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from "react";
+import React, { FC, FormEvent, useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserReview } from "@/hooks/useReviews";
 import { Star, MessageCircle, Edit2, Trash2 } from "lucide-react";
@@ -12,7 +12,7 @@ interface UserReviewProps {
   onReviewChange?: () => void;
 }
 
-const UserReview: React.FC<UserReviewProps> = ({
+const UserReview: FC<UserReviewProps> = ({
   movieId,
   showForm,
   onCloseForm,
@@ -28,7 +28,7 @@ const UserReview: React.FC<UserReviewProps> = ({
   const [hoverRating, setHoverRating] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (showForm && !review) {
       setRating(0);
       setComment("");
