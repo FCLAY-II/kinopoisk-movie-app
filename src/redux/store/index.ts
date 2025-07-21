@@ -1,8 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import userReducer from "./features/user/userSlice";
-import moviesReducer from "./features/movies/moviesSlice";
-import favoritesReducer from "./features/favorites/favoritesSlice";
-import watchedReducer from "./features/watched/watchedSlice";
+import userReducer from "../features/user/userSlice";
+import moviesReducer from "../features/movies/moviesSlice";
+import favoritesReducer from "../features/favorites/favoritesSlice";
+import watchedReducer from "../features/watched/watchedSlice";
+import rootReducer from "@/redux/store/rootReducer";
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     movies: moviesReducer,
     favorites: favoritesReducer,
     watched: watchedReducer,
+    reducer: rootReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

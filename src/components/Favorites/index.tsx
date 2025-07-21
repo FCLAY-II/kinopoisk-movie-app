@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { FC, useMemo, useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/hooks/useAuth";
 import { useFavorites } from "@/hooks/useFavorites";
@@ -10,7 +10,7 @@ import s from "./Favorites.module.scss";
 type SortOption = "addedAt" | "rating" | "year" | "name";
 type ViewMode = "grid" | "list";
 
-const Favorites: React.FC = () => {
+const Favorites: FC = () => {
   const { user } = useAuth();
   const { favorites, loading, error } = useFavorites();
 
@@ -20,7 +20,7 @@ const Favorites: React.FC = () => {
   const [showSortMenu, setShowSortMenu] = useState(false);
 
   // Фильтрация и сортировка
-  const filteredAndSortedFavorites = React.useMemo(() => {
+  const filteredAndSortedFavorites = useMemo(() => {
     // Создаем копию массива для безопасной сортировки
     let filtered = [...favorites];
 

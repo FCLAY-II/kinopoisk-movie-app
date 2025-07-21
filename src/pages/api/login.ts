@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { setCookie } from "nookies";
+import { adminAuth } from "@/lib/firebase/admin";
 
 export default async function handler(
   req: NextApiRequest,
@@ -10,9 +11,15 @@ export default async function handler(
   }
 
   const { idToken } = req.body;
-  if (!idToken) return res.status(400).json({ message: "No token provided" });
+  if (!idToken) {
+    return res.status(400).json({ message: "No token provided" });
+  }
 
-  // (Можешь добавить проверку токена через firebase-admin здесь)
+  try {
+    await adminAuth.verifyIdToken(idToken);
+  } catch {
+    return res.status(401).json({ message: "Invalid token" });
+  }
 
   setCookie({ res }, "token", idToken, {
     httpOnly: true,

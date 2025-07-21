@@ -38,7 +38,7 @@ const Header: React.FC = () => {
   const handleLogout = async () => {
     await fetch("/api/logout", { method: "POST" });
     await handleSignOut();
-    dispatch(setUser(null));
+    dispatch({ type: "RESET_STORE" });
     await push("/auth");
   };
 

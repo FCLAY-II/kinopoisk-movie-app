@@ -41,12 +41,6 @@ const Auth: React.FC = () => {
     text: string;
   } | null>(null);
 
-  useEffect(() => {
-    if (user) {
-      router.push("/");
-    }
-  }, [user, router]);
-
   const showMessage = (type: "success" | "error", text: string) => {
     setMessage({ type, text });
     setTimeout(() => setMessage(null), 8000);
@@ -133,7 +127,7 @@ const Auth: React.FC = () => {
 
         if (result.success && result.user) {
           const idToken = await result.user.getIdToken();
-          await fetch("/api/sessionLogin", {
+          await fetch("/api/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ idToken }),
@@ -156,7 +150,14 @@ const Auth: React.FC = () => {
           formData?.displayName,
         );
 
-        if (result.success) {
+        if (result.success && result.user) {
+          const idToken = await result.user.getIdToken();
+          await fetch("/api/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ idToken }),
+          });
+          window.location.reload(); // это важно для SSR и initialUser!
           showMessage(
             "success",
             "Регистрация успешна! Проверьте почту для подтверждения email.",
