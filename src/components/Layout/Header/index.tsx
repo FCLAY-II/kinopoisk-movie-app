@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
-import { selectUser, setUser } from "@/redux/features/user/userSlice";
+import { selectUser } from "@/redux/features/user/userSlice";
 import { Film, Heart, LogOut, Menu, X, User, Search } from "lucide-react";
 import MobileMenu from "./MobileMenu";
 import s from "./Header.module.scss";

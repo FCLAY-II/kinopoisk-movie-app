@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/router";
+import React, { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import {
   Mail,
@@ -23,7 +22,6 @@ import {
 type AuthMode = "signin" | "signup" | "reset";
 
 const Auth: React.FC = () => {
-  const router = useRouter();
   const { user } = useAuth();
 
   const [mode, setMode] = useState<AuthMode>("signin");

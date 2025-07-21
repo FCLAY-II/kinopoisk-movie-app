@@ -20,7 +20,7 @@ export const getInitialUser = async (
       uid: decoded.uid,
       email: decoded.email ?? undefined,
       displayName: decoded.name || "",
-      emailVerified: !decoded.email_verified,
+      emailVerified: !!decoded.email_verified,
     };
   } catch {
     return null;
