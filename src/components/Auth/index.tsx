@@ -131,7 +131,14 @@ const Auth: React.FC = () => {
       if (mode === "signin") {
         result = await handleSignIn(formData.email, formData.password);
 
-        if (result.success) {
+        if (result.success && result.user) {
+          const idToken = await result.user.getIdToken();
+          await fetch("/api/sessionLogin", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ idToken }),
+          });
+          window.location.reload();
           showMessage("success", "Вход выполнен успешно! Перенаправляем...");
         } else {
           const errorMessage = result.error?.code

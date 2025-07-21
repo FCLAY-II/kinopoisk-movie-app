@@ -36,6 +36,7 @@ const Header: React.FC = () => {
   }, [isMobileMenuOpen]);
 
   const handleLogout = async () => {
+    await fetch("/api/logout", { method: "POST" });
     await handleSignOut();
     dispatch(setUser(null));
     await push("/auth");
