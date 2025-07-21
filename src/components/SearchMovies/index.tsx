@@ -4,11 +4,12 @@ import { clearMovies } from "@/redux/features/movies/moviesSlice";
 import styles from "./SearchMovies.module.scss";
 import { getFilmsByKeyWordsThunk } from "@/redux/features/movies/thunks/getFilmsByKeyWordsThunk";
 import { useDebounce } from "@/hooks/useDebounce";
+import MovieList from "@/components/MovieList";
 
 const SearchMovies: React.FC = () => {
   const [query, setQuery] = useState("");
-  const debouncedQuery = useDebounce(query, 1500); // Уменьшил время
-  const lastSearchRef = useRef<string>(""); // Отслеживаем последний поиск
+  const debouncedQuery = useDebounce(query, 1500);
+  const lastSearchRef = useRef<string>("");
   const dispatch = useAppDispatch();
   const { loading } = useAppSelector((state) => state.movies);
 
@@ -17,7 +18,6 @@ const SearchMovies: React.FC = () => {
     if (!searchQuery.trim() || searchQuery === lastSearchRef.current) {
       return;
     }
-
     lastSearchRef.current = searchQuery;
     dispatch(clearMovies());
     dispatch(getFilmsByKeyWordsThunk({ query: searchQuery.trim() }));
@@ -30,8 +30,7 @@ const SearchMovies: React.FC = () => {
     }
   }, [debouncedQuery]);
 
-  // Ручной поиск
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!query.trim()) return;
 
@@ -40,7 +39,11 @@ const SearchMovies: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className={styles.pageContainer}>
+      <div className={styles.header}>
+        <h2 className={styles.title}>Поиск фильмов</h2>
+        <p className={styles.subtitle}>Найдите любимые фильмы и сериалы</p>
+      </div>
       <form onSubmit={handleSubmit} className={styles.formContainer}>
         <input
           type="text"
@@ -58,6 +61,7 @@ const SearchMovies: React.FC = () => {
           {loading ? "Поиск..." : "Найти"}
         </button>
       </form>
+      <MovieList />
     </div>
   );
 };

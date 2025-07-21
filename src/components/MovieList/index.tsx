@@ -11,15 +11,15 @@ const MovieList = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center p-8">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-        <span className="ml-2">Загрузка...</span>
+      <div className={s.loading}>
+        <div className={s.loaderSpinner}></div>
+        <span className={s.loadingText}>Загрузка...</span>
       </div>
     );
   }
 
   if (error) {
-    return <div className="text-center p-8 text-red-500">{error}</div>;
+    return <div className={s.error}>{error}</div>;
   }
 
   if (moviesList.length === 0 && searchQuery) {
@@ -36,7 +36,7 @@ const MovieList = () => {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4">
+    <div className={s.gridContainer}>
       {moviesList.map((movie: IMovie) => {
         return <MovieCard key={movie.filmId} movie={movie} />;
       })}
