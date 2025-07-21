@@ -31,18 +31,21 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
     };
   }, [router]);
 
-  if (isLoading) {
-    return (
-      <Loading text="Переход на страницу..." subtext="Загружаем контент" />
-    );
-  }
-
   return (
     <div className={s.layout}>
       <Header />
       <main className={s.main}>
         <div className={s.container}>
-          <div className={s.content}>{children}</div>
+          <div className={s.content}>
+            {isLoading ? (
+              <Loading
+                text="Переход на страницу..."
+                subtext="Загружаем контент"
+              />
+            ) : (
+              children
+            )}
+          </div>
         </div>
       </main>
     </div>

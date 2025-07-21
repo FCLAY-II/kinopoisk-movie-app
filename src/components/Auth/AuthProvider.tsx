@@ -12,6 +12,7 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
       <Loading
         text="Проверка авторизации..."
         subtext="Подождите, идет инициализация"
+        isFullScreen
       />
     );
   }
