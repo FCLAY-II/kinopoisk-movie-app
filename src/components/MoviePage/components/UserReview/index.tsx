@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { FormEvent, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserReview } from "@/hooks/useReviews";
 import { Star, MessageCircle, Edit2, Trash2 } from "lucide-react";
@@ -35,7 +35,7 @@ const UserReview: React.FC<UserReviewProps> = ({
     }
   }, [showForm, review]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!user || rating === 0 || isSubmitting) return;
 
@@ -50,8 +50,6 @@ const UserReview: React.FC<UserReviewProps> = ({
       resetForm();
       onCloseForm();
       onReviewChange?.(); // Обновляем статистику
-    } catch (error) {
-      console.error("Error saving review:", error);
     } finally {
       setIsSubmitting(false);
     }
@@ -69,12 +67,8 @@ const UserReview: React.FC<UserReviewProps> = ({
     if (!review || !user) return;
 
     if (window.confirm("Вы уверены, что хотите удалить отзыв?")) {
-      try {
-        await deleteReview();
-        onReviewChange?.(); // Обновляем статистику
-      } catch (error) {
-        console.error("Error deleting review:", error);
-      }
+      await deleteReview();
+      onReviewChange?.(); // Обновляем статистику
     }
   };
 

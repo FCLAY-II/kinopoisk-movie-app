@@ -70,16 +70,9 @@ export const addToFavorites = async (
   movie: IMovie,
 ): Promise<FavoritesApiResult<FavoriteMovie>> => {
   try {
-    console.log("➕ Добавляем в избранное:", {
-      userId,
-      movieId: movie.filmId,
-      movieName: movie.nameRu || movie.nameEn,
-    });
-
     // Сначала проверим, нет ли уже такого фильма
     const exists = await isFavorite(userId, movie.filmId);
     if (exists) {
-      console.log("⚠️ Фильм уже в избранном");
       return {
         success: false,
         error: "Фильм уже добавлен в избранное",
@@ -93,12 +86,6 @@ export const addToFavorites = async (
       addedAt: serverTimestamp(),
     };
 
-    console.log("📝 Данные для добавления:", {
-      filmId: favoriteMovie.filmId,
-      nameRu: favoriteMovie.nameRu,
-      userId: favoriteMovie.userId,
-    });
-
     const docRef = await addDoc(favoritesRef, favoriteMovie);
 
     return {
@@ -110,8 +97,6 @@ export const addToFavorites = async (
       } as FavoriteMovie,
     };
   } catch (error) {
-    console.error("❌ Error adding to favorites:", error);
-
     // Детальная обработка ошибок
     if (error instanceof Error) {
       if (error.message.includes("permission-denied")) {
@@ -140,8 +125,6 @@ export const removeFromFavorites = async (
   filmId: number,
 ): Promise<FavoritesApiResult> => {
   try {
-    console.log("🗑️ Удаляем из избранного:", { userId, filmId });
-
     const favoritesRef = collection(db, COLLECTION_NAME);
     const q = query(
       favoritesRef,
@@ -152,7 +135,6 @@ export const removeFromFavorites = async (
     const querySnapshot = await getDocs(q);
 
     if (querySnapshot.empty) {
-      console.log("⚠️ Фильм не найден в избранном");
       return {
         success: false,
         error: "Фильм не найден в избранном",
@@ -163,11 +145,8 @@ export const removeFromFavorites = async (
     const deletePromises = querySnapshot.docs.map((doc) => deleteDoc(doc.ref));
     await Promise.all(deletePromises);
 
-    console.log("✅ Фильм удален из избранного");
-
     return { success: true };
   } catch (error) {
-    console.error("❌ Error removing from favorites:", error);
     return {
       success: false,
       error: `Ошибка при удалении из избранного: ${error}`,
@@ -189,8 +168,7 @@ export const isFavorite = async (
 
     const querySnapshot = await getDocs(q);
     return !querySnapshot.empty;
-  } catch (error) {
-    console.error("❌ Error checking if favorite:", error);
+  } catch {
     return false;
   }
 };

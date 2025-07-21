@@ -13,35 +13,7 @@ import {
 } from "firebase/firestore";
 import { User } from "firebase/auth";
 import { db } from "./config";
-
-export interface Review {
-  id: string;
-  movieId: number;
-  userId: string;
-  userDisplayName: string;
-  rating: number;
-  comment: string;
-  createdAt: number;
-  updatedAt: number;
-}
-
-export interface ReviewInput {
-  movieId: number;
-  rating: number;
-  comment: string;
-}
-
-export interface ReviewStats {
-  averageRating: number;
-  totalReviews: number;
-  ratingDistribution: {
-    1: number;
-    2: number;
-    3: number;
-    4: number;
-    5: number;
-  };
-}
+import { Review, ReviewInput, ReviewStats } from "@/lib/firebase/types";
 
 const REVIEWS_COLLECTION = "reviews";
 
@@ -79,8 +51,7 @@ export const getUserReview = async (
       createdAt: reviewData.createdAt?.toMillis() || 0,
       updatedAt: reviewData.updatedAt?.toMillis() || 0,
     };
-  } catch (error) {
-    console.error("Error getting user review:", error);
+  } catch {
     throw new Error("Ошибка при получении отзыва");
   }
 };
@@ -131,8 +102,7 @@ export const saveUserReview = async (
       createdAt: existingReview?.createdAt || now.toMillis(),
       updatedAt: now.toMillis(),
     };
-  } catch (error) {
-    console.error("Error saving review:", error);
+  } catch {
     throw new Error("Ошибка при сохранении отзыва");
   }
 };
@@ -144,8 +114,7 @@ export const deleteUserReview = async (reviewId: string): Promise<void> => {
   try {
     const reviewRef = doc(db, REVIEWS_COLLECTION, reviewId);
     await deleteDoc(reviewRef);
-  } catch (error) {
-    console.error("Error deleting review:", error);
+  } catch {
     throw new Error("Ошибка при удалении отзыва");
   }
 };
@@ -181,8 +150,7 @@ export const getMovieReviews = async (
         updatedAt: data.updatedAt?.toMillis() || 0,
       };
     });
-  } catch (error) {
-    console.error("Error getting movie reviews:", error);
+  } catch {
     throw new Error("Ошибка при получении отзывов");
   }
 };
@@ -226,8 +194,7 @@ export const getMovieReviewStats = async (
       totalReviews,
       ratingDistribution,
     };
-  } catch (error) {
-    console.error("Error getting review stats:", error);
+  } catch {
     throw new Error("Ошибка при получении статистики отзывов");
   }
 };
@@ -263,8 +230,7 @@ export const getUserReviews = async (
         updatedAt: data.updatedAt?.toMillis() || 0,
       };
     });
-  } catch (error) {
-    console.error("Error getting user reviews:", error);
+  } catch {
     throw new Error("Ошибка при получении отзывов пользователя");
   }
 };

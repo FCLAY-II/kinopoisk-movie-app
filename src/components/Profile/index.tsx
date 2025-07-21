@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, FC } from "react";
 import { useRouter } from "next/router";
 import { useAuth } from "@/hooks/useAuth";
 import {
@@ -28,7 +28,7 @@ import { setUser } from "@/redux/features/user/userSlice";
 const cloneFirebaseUser = (user: FirebaseUser): FirebaseUser =>
   Object.assign(Object.create(Object.getPrototypeOf(user)), user);
 
-const Profile: React.FC = () => {
+const Profile: FC = () => {
   const router = useRouter();
   const { user } = useAuth();
   const dispatch = useAppDispatch();
@@ -55,7 +55,7 @@ const Profile: React.FC = () => {
 
   useEffect(() => {
     if (!user) {
-      router.push("/auth");
+      void router.push("/auth");
     } else {
       setFormData((prev) => ({
         ...prev,
@@ -79,8 +79,7 @@ const Profile: React.FC = () => {
       dispatch(setUser(cloneFirebaseUser(user)));
       setIsEditingProfile(false);
       showMessage("success", "Профиль успешно обновлен!");
-    } catch (error) {
-      console.error("Profile update error:", error);
+    } catch {
       showMessage("error", "Ошибка при обновлении профиля");
     } finally {
       setIsLoading(false);
@@ -113,7 +112,6 @@ const Profile: React.FC = () => {
         "Email успешно обновлен! Проверьте почту для подтверждения.",
       );
     } catch (error: any) {
-      console.error("Email update error:", error);
       if (error.code === "auth/email-already-in-use") {
         showMessage("error", "Этот email уже используется");
       } else {
@@ -167,8 +165,7 @@ const Profile: React.FC = () => {
         confirmPassword: "",
       }));
       showMessage("success", "Пароль успешно обновлен!");
-    } catch (error: any) {
-      console.error("Password update error:", error);
+    } catch {
       showMessage("error", "Ошибка при обновлении пароля");
     } finally {
       setIsLoading(false);
@@ -186,8 +183,7 @@ const Profile: React.FC = () => {
       } else {
         showMessage("error", "Ошибка при отправке письма");
       }
-    } catch (error) {
-      console.error("Resend verification error:", error);
+    } catch {
       showMessage("error", "Ошибка при отправке письма");
     } finally {
       setIsLoading(false);

@@ -50,7 +50,6 @@ export const handleApiError = (error: unknown): string => {
 kinopoiskApi.interceptors.response.use(
   (response) => response,
   (error: AxiosError) => {
-    console.error("API Error:", error);
     return Promise.reject(error);
   },
 );

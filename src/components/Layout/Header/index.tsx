@@ -10,7 +10,7 @@ import { handleSignOut } from "@/lib/firebase/auth";
 import { useToggle } from "@/hooks/useToggle";
 
 const Header: React.FC = () => {
-  const router = useRouter();
+  const { push, pathname } = useRouter();
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
   const [isMobileMenuOpen, toggleMobileMenu, setIsMobileMenuOpen] = useToggle();
@@ -18,7 +18,7 @@ const Header: React.FC = () => {
   // Закрываем мобильное меню при изменении маршрута
   useEffect(() => {
     setIsMobileMenuOpen(false);
-  }, [router.pathname]);
+  }, [pathname]);
 
   // Закрываем мобильное меню при клике вне его
   useEffect(() => {
@@ -36,17 +36,13 @@ const Header: React.FC = () => {
   }, [isMobileMenuOpen]);
 
   const handleLogout = async () => {
-    try {
-      await handleSignOut();
-      dispatch(setUser(null));
-      router.push("/auth");
-    } catch (error) {
-      console.error("Ошибка при выходе:", error);
-    }
+    await handleSignOut();
+    dispatch(setUser(null));
+    await push("/auth");
   };
 
   const isActiveRoute = (path: string) => {
-    return router.pathname === path;
+    return pathname === path;
   };
 
   const handleToggleMobileMenu = (e: React.MouseEvent) => {

@@ -1,6 +1,5 @@
 import { handleApiError, kinopoiskApi } from "@/services/api/baseApi";
 import { AxiosError } from "axios";
-import { SearchMoviesParams } from "@/services/api/types";
 import { IMovie } from "@/components/MovieCard/types";
 import { SearchResponse } from "@/types/movie";
 
@@ -8,7 +7,10 @@ export const filmSearchService = {
   async searchMovies({
     query,
     page = 1,
-  }: SearchMoviesParams): Promise<IMovie[]> {
+  }: {
+    query: string;
+    page?: number;
+  }): Promise<IMovie[]> {
     try {
       const { data } = await kinopoiskApi.get<SearchResponse>(
         "/api/v2.1/films/search-by-keyword",
