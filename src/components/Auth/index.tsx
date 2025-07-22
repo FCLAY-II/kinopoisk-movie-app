@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import {
   Mail,
@@ -19,13 +18,13 @@ import {
   handleSignIn,
   handleSignUp,
 } from "@/lib/firebase/auth";
+import { useRouter } from "next/router";
 
 type AuthMode = "signin" | "signup" | "reset";
 
 const Auth: React.FC = () => {
-  const router = useRouter();
   const { user } = useAuth();
-
+  const router = useRouter();
   const [mode, setMode] = useState<AuthMode>("signin");
   const [formData, setFormData] = useState({
     email: "",
@@ -40,12 +39,6 @@ const Auth: React.FC = () => {
     type: "success" | "error";
     text: string;
   } | null>(null);
-
-  useEffect(() => {
-    if (user) {
-      router.push("/");
-    }
-  }, [user, router]);
 
   const showMessage = (type: "success" | "error", text: string) => {
     setMessage({ type, text });
@@ -124,14 +117,20 @@ const Auth: React.FC = () => {
     setIsLoading(true);
     setMessage(null);
 
-    // Оборачиваем весь процесс в дополнительный try-catch
     try {
       let result;
 
       if (mode === "signin") {
         result = await handleSignIn(formData.email, formData.password);
 
-        if (result.success) {
+        if (result.success && result.user) {
+          const idToken = await result.user.getIdToken();
+          await fetch("/api/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ idToken }),
+          });
+          window.location.reload();
           showMessage("success", "Вход выполнен успешно! Перенаправляем...");
         } else {
           const errorMessage = result.error?.code
@@ -149,7 +148,14 @@ const Auth: React.FC = () => {
           formData?.displayName,
         );
 
-        if (result.success) {
+        if (result.success && result.user) {
+          const idToken = await result.user.getIdToken();
+          await fetch("/api/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ idToken }),
+          });
+          window.location.reload(); // это важно для SSR и initialUser!
           showMessage(
             "success",
             "Регистрация успешна! Проверьте почту для подтверждения email.",
@@ -202,7 +208,6 @@ const Auth: React.FC = () => {
         }
       }
     } catch {
-      // Последний резерв - если что-то пойдет не так
       showMessage(
         "error",
         "Произошла неожиданная ошибка. Попробуйте обновить страницу.",
@@ -260,6 +265,25 @@ const Auth: React.FC = () => {
         return <Mail size={18} />;
     }
   };
+
+  useEffect(() => {
+    if (!user) return;
+
+    const syncSession = async () => {
+      try {
+        const idToken = await user.getIdToken();
+        await fetch("/api/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ idToken }),
+        });
+      } finally {
+        void router.replace("/search-movies");
+      }
+    };
+
+    void syncSession();
+  }, [user, router]);
 
   if (user) {
     return null;

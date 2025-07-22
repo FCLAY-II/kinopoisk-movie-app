@@ -1,17 +1,14 @@
-import React, { useState } from "react";
+import React, { FC, useMemo, useState } from "react";
 import Link from "next/link";
-import { useAuth } from "@/hooks/useAuth";
 import { useFavorites } from "@/hooks/useFavorites";
 import MovieCard from "@/components/MovieCard";
-import { Loading } from "@/components/Loading";
 import { Heart, Search, Filter, Grid, List, ChevronDown } from "lucide-react";
 import s from "./Favorites.module.scss";
 
 type SortOption = "addedAt" | "rating" | "year" | "name";
 type ViewMode = "grid" | "list";
 
-const Favorites: React.FC = () => {
-  const { user } = useAuth();
+const Favorites: FC = () => {
   const { favorites, loading, error } = useFavorites();
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -20,7 +17,7 @@ const Favorites: React.FC = () => {
   const [showSortMenu, setShowSortMenu] = useState(false);
 
   // Фильтрация и сортировка
-  const filteredAndSortedFavorites = React.useMemo(() => {
+  const filteredAndSortedFavorites = useMemo(() => {
     // Создаем копию массива для безопасной сортировки
     let filtered = [...favorites];
 
@@ -75,18 +72,6 @@ const Favorites: React.FC = () => {
         return "Названию";
     }
   };
-
-  if (!user) {
-    return (
-      <div className={s.errorContainer}>
-        <div className={s.errorContent}>
-          <Heart size={48} className={s.errorIcon} />
-          <h2>Необходима авторизация</h2>
-          <p>Для просмотра избранных фильмов нужно войти в аккаунт</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className={s.favoritesPage}>
@@ -169,8 +154,6 @@ const Favorites: React.FC = () => {
           </div>
         </div>
       )}
-
-      {loading && <Loading text="Загрузка избранных фильмов..." />}
 
       {error && (
         <div className={s.errorContainer}>

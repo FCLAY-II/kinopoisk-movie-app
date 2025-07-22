@@ -1,26 +1,13 @@
-import { useEffect } from "react";
-import { useRouter } from "next/router";
-import { useAppSelector } from "@/redux/hooks";
-import { selectUser, selectAuthChecked } from "@/redux/features/user/userSlice";
-import { Loading } from "@/components/Loading";
-import React from "react";
+import { GetServerSideProps } from "next";
+import { getInitialUser } from "@/lib/auth/ssrAuth";
 
-const HomePage = () => {
-  const router = useRouter();
-  const user = useAppSelector(selectUser);
-  const authChecked = useAppSelector(selectAuthChecked);
-
-  useEffect(() => {
-    if (authChecked) {
-      if (user) {
-        router.replace("/search-movies");
-      } else {
-        router.replace("/auth");
-      }
-    }
-  }, [user, authChecked, router]);
-
-  return <Loading />;
+const HomePage = () => null;
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const user = await getInitialUser(ctx);
+  if (user) {
+    return { redirect: { destination: "/search-movies", permanent: false } };
+  }
+  return { redirect: { destination: "/auth", permanent: false } };
 };
 
 export default HomePage;

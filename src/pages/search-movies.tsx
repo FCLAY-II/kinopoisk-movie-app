@@ -1,26 +1,28 @@
-import React, { useEffect } from "react";
-import { useRouter } from "next/router";
-import { useAppSelector } from "@/redux/hooks";
+import React from "react";
 import SearchMovies from "@/components/SearchMovies";
 import MainLayout from "@/components/Layout/MainLayout";
+import { GetServerSideProps } from "next";
+import { getInitialUser, type InitialUser } from "@/lib/auth/ssrAuth";
 
-const SearchMoviesPage: React.FC = () => {
-  const router = useRouter();
-  const user = useAppSelector((state) => state.user.user);
+interface PageProps {
+  initialUser: InitialUser;
+}
 
-  useEffect(() => {
-    if (!user) {
-      void router.push("/auth");
-    }
-  }, [user, router]);
-
-  if (!user) return null;
-
+const SearchMoviesPage: React.FC<PageProps> = ({ initialUser }) => {
   return (
-    <MainLayout>
+    <MainLayout initialUser={initialUser}>
       <SearchMovies />
     </MainLayout>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const user = await getInitialUser(ctx);
+  if (!user) {
+    return { redirect: { destination: "/auth", permanent: false } };
+  }
+
+  return { props: { initialUser: user } };
 };
 
 export default SearchMoviesPage;
