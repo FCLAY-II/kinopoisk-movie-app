@@ -54,9 +54,7 @@ const Profile: FC = () => {
   });
 
   useEffect(() => {
-    if (!user) {
-      void router.push("/auth");
-    } else {
+    if (user) {
       setFormData((prev) => ({
         ...prev,
         displayName: user.displayName || "",
@@ -76,6 +74,12 @@ const Profile: FC = () => {
     setIsLoading(true);
     try {
       await updateProfile(user, { displayName: formData.displayName });
+      const idToken = await user.getIdToken(true);
+      await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ idToken }),
+      });
       dispatch(setUser(cloneFirebaseUser(user)));
       setIsEditingProfile(false);
       showMessage("success", "Профиль успешно обновлен!");
@@ -105,6 +109,12 @@ const Profile: FC = () => {
       }
 
       await updateEmail(user, formData.email);
+      const idToken = await user.getIdToken(true);
+      await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ idToken }),
+      });
       setIsEditingEmail(false);
       setFormData((prev) => ({ ...prev, currentPassword: "" }));
       showMessage(
