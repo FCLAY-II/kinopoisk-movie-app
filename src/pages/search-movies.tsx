@@ -2,11 +2,15 @@ import React from "react";
 import SearchMovies from "@/components/SearchMovies";
 import MainLayout from "@/components/Layout/MainLayout";
 import { GetServerSideProps } from "next";
-import { getInitialUser } from "@/lib/auth/ssrAuth";
+import { getInitialUser, type InitialUser } from "@/lib/auth/ssrAuth";
 
-const SearchMoviesPage: React.FC = () => {
+interface PageProps {
+  initialUser: InitialUser;
+}
+
+const SearchMoviesPage: React.FC<PageProps> = ({ initialUser }) => {
   return (
-    <MainLayout>
+    <MainLayout initialUser={initialUser}>
       <SearchMovies />
     </MainLayout>
   );
@@ -18,7 +22,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     return { redirect: { destination: "/auth", permanent: false } };
   }
 
-  return { props: {} };
+  return { props: { initialUser: user } };
 };
 
 export default SearchMoviesPage;

@@ -1,19 +1,25 @@
-import React, { useEffect } from "react";
+import React, { FC, useEffect } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { useAppSelector, useAppDispatch } from "@/redux/hooks";
-import { selectUser } from "@/redux/features/user/userSlice";
+import { useAppDispatch } from "@/redux/hooks";
+import { useAuth } from "@/hooks/useAuth";
 import { Film, Heart, LogOut, Menu, X, User, Search } from "lucide-react";
 import MobileMenu from "./MobileMenu";
 import s from "./Header.module.scss";
 import { handleSignOut } from "@/lib/firebase/auth";
 import { useToggle } from "@/hooks/useToggle";
+import type { InitialUser } from "@/lib/auth/ssrAuth";
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  initialUser?: InitialUser | null;
+}
+
+const Header: FC<HeaderProps> = ({ initialUser }) => {
   const { push, pathname } = useRouter();
   const dispatch = useAppDispatch();
-  const user = useAppSelector(selectUser);
+  const { user, authChecked } = useAuth();
   const [isMobileMenuOpen, toggleMobileMenu, setIsMobileMenuOpen] = useToggle();
+  const displayUser = user || initialUser || null;
 
   // Закрываем мобильное меню при изменении маршрута
   useEffect(() => {
@@ -94,22 +100,24 @@ const Header: React.FC = () => {
             </ul>
           </nav>
 
-          <div className={s.userSection}>
-            {user && (
-              <div className={s.userInfo}>
-                <div className={s.avatar}>
-                  <User size={20} />
+          {(authChecked || initialUser) && (
+            <div className={s.userSection}>
+              {displayUser && (
+                <div className={s.userInfo}>
+                  <div className={s.avatar}>
+                    <User size={20} />
+                  </div>
+                  <span className={s.userName}>
+                    {displayUser.displayName || displayUser.email}
+                  </span>
                 </div>
-                <span className={s.userName}>
-                  {user.displayName || user.email}
-                </span>
-              </div>
-            )}
-            <button onClick={handleLogout} className={s.logoutButton}>
-              <LogOut size={16} />
-              Выйти
-            </button>
-          </div>
+              )}
+              <button onClick={handleLogout} className={s.logoutButton}>
+                <LogOut size={16} />
+                Выйти
+              </button>
+            </div>
+          )}
 
           <button
             className={s.mobileMenuButton}
@@ -121,7 +129,7 @@ const Header: React.FC = () => {
       </header>
       <MobileMenu
         isOpen={isMobileMenuOpen}
-        user={user}
+        user={displayUser}
         onLogout={handleLogout}
       />
     </>

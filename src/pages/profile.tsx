@@ -1,12 +1,16 @@
 import React from "react";
 import { GetServerSideProps } from "next";
 import MainLayout from "@/components/Layout/MainLayout";
-import { getInitialUser } from "@/lib/auth/ssrAuth";
+import { getInitialUser, type InitialUser } from "@/lib/auth/ssrAuth";
 import Profile from "@/components/Profile";
 
-const ProfilePage: React.FC = () => {
+interface PageProps {
+  initialUser: InitialUser;
+}
+
+const ProfilePage: React.FC<PageProps> = ({ initialUser }) => {
   return (
-    <MainLayout>
+    <MainLayout initialUser={initialUser}>
       <Profile />
     </MainLayout>
   );

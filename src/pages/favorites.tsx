@@ -3,16 +3,20 @@ import Head from "next/head";
 import Favorites from "@/components/Favorites";
 import MainLayout from "@/components/Layout/MainLayout";
 import { GetServerSideProps } from "next";
-import { getInitialUser } from "@/lib/auth/ssrAuth";
+import { getInitialUser, type InitialUser } from "@/lib/auth/ssrAuth";
 
-const FavoritesPage: FC = () => {
+interface PageProps {
+  initialUser: InitialUser;
+}
+
+const FavoritesPage: FC<PageProps> = ({ initialUser }) => {
   return (
     <>
       <Head>
         <title>Избранные фильмы - КиноПоиск</title>
         <meta name="description" content="Ваши избранные фильмы" />
       </Head>
-      <MainLayout>
+      <MainLayout initialUser={initialUser}>
         <Favorites />
       </MainLayout>
     </>
@@ -25,7 +29,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     return { redirect: { destination: "/auth", permanent: false } };
   }
 
-  return { props: {} };
+  return { props: { initialUser: user } };
 };
 
 export default FavoritesPage;

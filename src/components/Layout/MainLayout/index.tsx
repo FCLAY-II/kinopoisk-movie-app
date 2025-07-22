@@ -3,12 +3,14 @@ import Header from "../Header";
 import { Loading } from "@/components/Loading";
 import s from "./MainLayout.module.scss";
 import { useAppSelector } from "@/redux/hooks";
+import type { InitialUser } from "@/lib/auth/ssrAuth";
 
 interface MainLayoutProps {
   children: ReactNode;
+  initialUser?: InitialUser | null;
 }
 
-const MainLayout: FC<MainLayoutProps> = ({ children }) => {
+const MainLayout: FC<MainLayoutProps> = ({ children, initialUser }) => {
   const isLoading = useAppSelector(
     (state) =>
       state.movies.loading ||
@@ -17,7 +19,7 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
   );
   return (
     <div className={s.layout}>
-      <Header />
+      <Header initialUser={initialUser} />
       <main className={s.main}>
         <div className={s.container}>
           <div className={s.content}>
