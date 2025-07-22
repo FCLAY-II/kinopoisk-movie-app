@@ -54,9 +54,7 @@ const Profile: FC = () => {
   });
 
   useEffect(() => {
-    if (!user) {
-      void router.push("/auth");
-    } else {
+    if (user) {
       setFormData((prev) => ({
         ...prev,
         displayName: user.displayName || "",
